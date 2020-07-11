@@ -9,10 +9,16 @@ def loader(image_path):
     image = default_loader(image_path)
     mask_path = image_path.replace('samples', 'masks')
     mask = default_loader(mask_path)
+    # assert image.size == mask.size, 'Size mismatch'
     return image, mask
 
 def transform():
     return transforms.Compose([
+        transforms.RandomHorizontalFlip(),
+        transforms.RandomVerticalFlip(),
+        transforms.RandomRotation(45),
+        transforms.RandomCrop((512 // 4 * 3, 640 // 4 * 3)),
+        transforms.Resize((512, 640)),
         transforms.Grayscale(),
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
@@ -50,7 +56,7 @@ class BACTERIA(ImageFolder, CrossValidationDataset):
         image, mask = self.loader(filepath)
         image, mask = self.transform(image, mask)
         if self.target is None:
-            return image, mask, label
+            return filepath, image, mask, label
         else:
             returns = {'mask': mask, 'label': label}
             return image, returns[self.target]
