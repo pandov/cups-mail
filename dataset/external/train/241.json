@@ -1,0 +1,488 @@
+{
+  "shapes": [
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          0,
+          42
+        ],
+        [
+          1,
+          42
+        ],
+        [
+          3,
+          45
+        ],
+        [
+          9,
+          41
+        ],
+        [
+          8,
+          39
+        ],
+        [
+          9,
+          36
+        ],
+        [
+          6,
+          31
+        ],
+        [
+          2,
+          32
+        ],
+        [
+          0,
+          28
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          27,
+          45
+        ],
+        [
+          30,
+          41
+        ],
+        [
+          32,
+          41
+        ],
+        [
+          35,
+          39
+        ],
+        [
+          35,
+          32
+        ],
+        [
+          31,
+          31
+        ],
+        [
+          30,
+          33
+        ],
+        [
+          27,
+          31
+        ],
+        [
+          25,
+          34
+        ],
+        [
+          24,
+          39
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          48,
+          40
+        ],
+        [
+          52,
+          44
+        ],
+        [
+          56,
+          44
+        ],
+        [
+          58,
+          48
+        ],
+        [
+          61,
+          50
+        ],
+        [
+          65,
+          45
+        ],
+        [
+          70,
+          41
+        ],
+        [
+          68,
+          31
+        ],
+        [
+          54,
+          31
+        ],
+        [
+          54,
+          33
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          103,
+          34
+        ],
+        [
+          106,
+          37
+        ],
+        [
+          107,
+          42
+        ],
+        [
+          112,
+          43
+        ],
+        [
+          117,
+          41
+        ],
+        [
+          116,
+          39
+        ],
+        [
+          120,
+          31
+        ],
+        [
+          112,
+          27
+        ],
+        [
+          107,
+          26
+        ],
+        [
+          107,
+          30
+        ],
+        [
+          105,
+          29
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          293,
+          95
+        ],
+        [
+          287,
+          104
+        ],
+        [
+          290,
+          107
+        ],
+        [
+          295,
+          106
+        ],
+        [
+          296,
+          109
+        ],
+        [
+          301,
+          111
+        ],
+        [
+          306,
+          108
+        ],
+        [
+          305,
+          105
+        ],
+        [
+          308,
+          101
+        ],
+        [
+          302,
+          97
+        ],
+        [
+          299,
+          100
+        ],
+        [
+          298,
+          96
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          431,
+          59
+        ],
+        [
+          430,
+          64
+        ],
+        [
+          435,
+          71
+        ],
+        [
+          440,
+          68
+        ],
+        [
+          438,
+          66
+        ],
+        [
+          442,
+          66
+        ],
+        [
+          444,
+          63
+        ],
+        [
+          441,
+          61
+        ],
+        [
+          441,
+          57
+        ],
+        [
+          438,
+          56
+        ],
+        [
+          436,
+          60
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          551,
+          43
+        ],
+        [
+          550,
+          53
+        ],
+        [
+          553,
+          53
+        ],
+        [
+          553,
+          51
+        ],
+        [
+          559,
+          51
+        ],
+        [
+          557,
+          43
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          573,
+          44
+        ],
+        [
+          577,
+          48
+        ],
+        [
+          585,
+          45
+        ],
+        [
+          585,
+          60
+        ],
+        [
+          578,
+          67
+        ],
+        [
+          570,
+          68
+        ],
+        [
+          567,
+          66
+        ],
+        [
+          569,
+          56
+        ],
+        [
+          566,
+          54
+        ],
+        [
+          569,
+          48
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          639,
+          271
+        ],
+        [
+          630,
+          271
+        ],
+        [
+          631,
+          291
+        ],
+        [
+          639,
+          293
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          94,
+          334
+        ],
+        [
+          92,
+          332
+        ],
+        [
+          91,
+          331
+        ],
+        [
+          91,
+          328
+        ],
+        [
+          92,
+          325
+        ],
+        [
+          94,
+          323
+        ],
+        [
+          98,
+          324
+        ],
+        [
+          101,
+          325
+        ],
+        [
+          102,
+          327
+        ],
+        [
+          103,
+          328
+        ],
+        [
+          103,
+          332
+        ],
+        [
+          102,
+          334
+        ],
+        [
+          100,
+          335
+        ],
+        [
+          98,
+          335
+        ],
+        [
+          94,
+          334
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    }
+  ],
+  "imageHeight": 512,
+  "imageWidth": 640
+}

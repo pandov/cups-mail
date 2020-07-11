@@ -1,0 +1,849 @@
+{
+  "shapes": [
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          94,
+          87
+        ],
+        [
+          92,
+          84
+        ],
+        [
+          91,
+          82
+        ],
+        [
+          96,
+          80
+        ],
+        [
+          95,
+          71
+        ],
+        [
+          92,
+          72
+        ],
+        [
+          93,
+          69
+        ],
+        [
+          89,
+          64
+        ],
+        [
+          86,
+          66
+        ],
+        [
+          82,
+          64
+        ],
+        [
+          79,
+          65
+        ],
+        [
+          81,
+          70
+        ],
+        [
+          75,
+          72
+        ],
+        [
+          75,
+          76
+        ],
+        [
+          77,
+          77
+        ],
+        [
+          73,
+          79
+        ],
+        [
+          77,
+          86
+        ],
+        [
+          80,
+          83
+        ],
+        [
+          81,
+          85
+        ],
+        [
+          78,
+          89
+        ],
+        [
+          82,
+          94
+        ],
+        [
+          91,
+          94
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          56,
+          264
+        ],
+        [
+          56,
+          262
+        ],
+        [
+          61,
+          262
+        ],
+        [
+          62,
+          259
+        ],
+        [
+          61,
+          251
+        ],
+        [
+          55,
+          248
+        ],
+        [
+          53,
+          249
+        ],
+        [
+          50,
+          248
+        ],
+        [
+          47,
+          253
+        ],
+        [
+          47,
+          258
+        ],
+        [
+          51,
+          262
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          100,
+          327
+        ],
+        [
+          101,
+          323
+        ],
+        [
+          105,
+          319
+        ],
+        [
+          111,
+          322
+        ],
+        [
+          114,
+          328
+        ],
+        [
+          114,
+          331
+        ],
+        [
+          112,
+          332
+        ],
+        [
+          112,
+          335
+        ],
+        [
+          108,
+          338
+        ],
+        [
+          100,
+          334
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          58,
+          374
+        ],
+        [
+          54,
+          372
+        ],
+        [
+          51,
+          368
+        ],
+        [
+          51,
+          363
+        ],
+        [
+          48,
+          359
+        ],
+        [
+          44,
+          362
+        ],
+        [
+          45,
+          370
+        ],
+        [
+          43,
+          373
+        ],
+        [
+          40,
+          370
+        ],
+        [
+          36,
+          371
+        ],
+        [
+          41,
+          377
+        ],
+        [
+          40,
+          382
+        ],
+        [
+          42,
+          385
+        ],
+        [
+          41,
+          399
+        ],
+        [
+          46,
+          406
+        ],
+        [
+          50,
+          407
+        ],
+        [
+          56,
+          401
+        ],
+        [
+          53,
+          398
+        ],
+        [
+          60,
+          392
+        ],
+        [
+          56,
+          387
+        ],
+        [
+          58,
+          384
+        ],
+        [
+          57,
+          383
+        ],
+        [
+          61,
+          379
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          0,
+          381
+        ],
+        [
+          4,
+          381
+        ],
+        [
+          5,
+          378
+        ],
+        [
+          8,
+          377
+        ],
+        [
+          10,
+          373
+        ],
+        [
+          8,
+          370
+        ],
+        [
+          11,
+          364
+        ],
+        [
+          6,
+          364
+        ],
+        [
+          2,
+          360
+        ],
+        [
+          0,
+          361
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          245,
+          228
+        ],
+        [
+          240,
+          227
+        ],
+        [
+          235,
+          230
+        ],
+        [
+          240,
+          240
+        ],
+        [
+          245,
+          235
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          252,
+          212
+        ],
+        [
+          253,
+          207
+        ],
+        [
+          258,
+          206
+        ],
+        [
+          256,
+          197
+        ],
+        [
+          251,
+          198
+        ],
+        [
+          246,
+          197
+        ],
+        [
+          242,
+          202
+        ],
+        [
+          244,
+          210
+        ],
+        [
+          247,
+          213
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          21,
+          510
+        ],
+        [
+          21,
+          506
+        ],
+        [
+          23,
+          502
+        ],
+        [
+          15,
+          497
+        ],
+        [
+          12,
+          502
+        ],
+        [
+          13,
+          506
+        ],
+        [
+          16,
+          512
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          41,
+          430
+        ],
+        [
+          42,
+          428
+        ],
+        [
+          40,
+          425
+        ],
+        [
+          38,
+          428
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          227,
+          502
+        ],
+        [
+          225,
+          498
+        ],
+        [
+          218,
+          500
+        ],
+        [
+          220,
+          506
+        ],
+        [
+          219,
+          512
+        ],
+        [
+          229,
+          512
+        ],
+        [
+          230,
+          512
+        ],
+        [
+          228,
+          511
+        ],
+        [
+          234,
+          508
+        ],
+        [
+          234,
+          506
+        ],
+        [
+          231,
+          502
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          551,
+          388
+        ],
+        [
+          558,
+          382
+        ],
+        [
+          554,
+          378
+        ],
+        [
+          554,
+          374
+        ],
+        [
+          551,
+          370
+        ],
+        [
+          547,
+          371
+        ],
+        [
+          543,
+          377
+        ],
+        [
+          544,
+          381
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          144,
+          426
+        ],
+        [
+          146,
+          423
+        ],
+        [
+          145,
+          421
+        ],
+        [
+          140,
+          420
+        ],
+        [
+          140,
+          423
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          123,
+          302
+        ],
+        [
+          123,
+          301
+        ],
+        [
+          126,
+          301
+        ],
+        [
+          126,
+          297
+        ],
+        [
+          121,
+          297
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          420,
+          206
+        ],
+        [
+          428,
+          201
+        ],
+        [
+          426,
+          190
+        ],
+        [
+          418,
+          189
+        ],
+        [
+          412,
+          190
+        ],
+        [
+          408,
+          194
+        ],
+        [
+          409,
+          201
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          527,
+          78
+        ],
+        [
+          533,
+          77
+        ],
+        [
+          537,
+          82
+        ],
+        [
+          542,
+          79
+        ],
+        [
+          539,
+          74
+        ],
+        [
+          540,
+          68
+        ],
+        [
+          537,
+          64
+        ],
+        [
+          532,
+          66
+        ],
+        [
+          533,
+          72
+        ],
+        [
+          531,
+          72
+        ],
+        [
+          530,
+          67
+        ],
+        [
+          526,
+          68
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          250,
+          72
+        ],
+        [
+          253,
+          70
+        ],
+        [
+          250,
+          66
+        ],
+        [
+          247,
+          66
+        ],
+        [
+          247,
+          70
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          240,
+          153
+        ],
+        [
+          243,
+          150
+        ],
+        [
+          240,
+          146
+        ],
+        [
+          237,
+          149
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          247,
+          151
+        ],
+        [
+          249,
+          149
+        ],
+        [
+          247,
+          144
+        ],
+        [
+          243,
+          142
+        ],
+        [
+          241,
+          144
+        ],
+        [
+          244,
+          146
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          190,
+          120
+        ],
+        [
+          192,
+          117
+        ],
+        [
+          189,
+          115
+        ],
+        [
+          187,
+          117
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "moraxella_catarrhalis"
+    }
+  ],
+  "imageWidth": 640,
+  "imageHeight": 512
+}

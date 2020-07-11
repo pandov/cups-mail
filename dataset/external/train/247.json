@@ -1,0 +1,463 @@
+{
+  "shapes": [
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          0,
+          320
+        ],
+        [
+          4,
+          317
+        ],
+        [
+          0,
+          310
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          23,
+          332
+        ],
+        [
+          25,
+          327
+        ],
+        [
+          25,
+          322
+        ],
+        [
+          27,
+          326
+        ],
+        [
+          31,
+          327
+        ],
+        [
+          31,
+          323
+        ],
+        [
+          31,
+          320
+        ],
+        [
+          37,
+          321
+        ],
+        [
+          41,
+          315
+        ],
+        [
+          38,
+          312
+        ],
+        [
+          36,
+          306
+        ],
+        [
+          41,
+          311
+        ],
+        [
+          49,
+          304
+        ],
+        [
+          48,
+          299
+        ],
+        [
+          44,
+          296
+        ],
+        [
+          43,
+          291
+        ],
+        [
+          37,
+          295
+        ],
+        [
+          36,
+          293
+        ],
+        [
+          37,
+          288
+        ],
+        [
+          32,
+          287
+        ],
+        [
+          30,
+          290
+        ],
+        [
+          26,
+          292
+        ],
+        [
+          29,
+          298
+        ],
+        [
+          28,
+          303
+        ],
+        [
+          32,
+          306
+        ],
+        [
+          30,
+          307
+        ],
+        [
+          23,
+          303
+        ],
+        [
+          16,
+          310
+        ],
+        [
+          16,
+          316
+        ],
+        [
+          15,
+          324
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          5,
+          284
+        ],
+        [
+          12,
+          285
+        ],
+        [
+          12,
+          276
+        ],
+        [
+          5,
+          277
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          79,
+          297
+        ],
+        [
+          74,
+          302
+        ],
+        [
+          72,
+          313
+        ],
+        [
+          82,
+          311
+        ],
+        [
+          84,
+          303
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          188,
+          268
+        ],
+        [
+          195,
+          273
+        ],
+        [
+          197,
+          277
+        ],
+        [
+          205,
+          273
+        ],
+        [
+          203,
+          266
+        ],
+        [
+          201,
+          266
+        ],
+        [
+          197,
+          259
+        ],
+        [
+          194,
+          263
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          241,
+          296
+        ],
+        [
+          249,
+          305
+        ],
+        [
+          260,
+          302
+        ],
+        [
+          259,
+          299
+        ],
+        [
+          260,
+          298
+        ],
+        [
+          261,
+          290
+        ],
+        [
+          257,
+          291
+        ],
+        [
+          250,
+          286
+        ],
+        [
+          247,
+          291
+        ],
+        [
+          245,
+          292
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          350,
+          286
+        ],
+        [
+          353,
+          290
+        ],
+        [
+          353,
+          293
+        ],
+        [
+          355,
+          295
+        ],
+        [
+          358,
+          294
+        ],
+        [
+          362,
+          298
+        ],
+        [
+          365,
+          297
+        ],
+        [
+          364,
+          294
+        ],
+        [
+          366,
+          293
+        ],
+        [
+          372,
+          293
+        ],
+        [
+          371,
+          284
+        ],
+        [
+          366,
+          274
+        ],
+        [
+          359,
+          271
+        ],
+        [
+          357,
+          277
+        ],
+        [
+          352,
+          280
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          545,
+          285
+        ],
+        [
+          551,
+          277
+        ],
+        [
+          549,
+          273
+        ],
+        [
+          541,
+          273
+        ],
+        [
+          539,
+          277
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_epidermidis",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          29,
+          269
+        ],
+        [
+          27,
+          267
+        ],
+        [
+          26,
+          267
+        ],
+        [
+          24,
+          267
+        ],
+        [
+          23,
+          265
+        ],
+        [
+          23,
+          264
+        ],
+        [
+          24,
+          263
+        ],
+        [
+          26,
+          263
+        ],
+        [
+          27,
+          264
+        ],
+        [
+          29,
+          264
+        ],
+        [
+          30,
+          263
+        ],
+        [
+          32,
+          265
+        ],
+        [
+          31,
+          267
+        ],
+        [
+          31,
+          268
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    }
+  ],
+  "imageHeight": 512,
+  "imageWidth": 640
+}

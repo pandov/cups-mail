@@ -1,0 +1,108 @@
+{
+  "shapes": [
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          502,
+          48
+        ],
+        [
+          510,
+          48
+        ],
+        [
+          514,
+          45
+        ],
+        [
+          518,
+          48
+        ],
+        [
+          525,
+          53
+        ],
+        [
+          523,
+          58
+        ],
+        [
+          524,
+          62
+        ],
+        [
+          521,
+          62
+        ],
+        [
+          520,
+          65
+        ],
+        [
+          515,
+          64
+        ],
+        [
+          511,
+          68
+        ],
+        [
+          508,
+          67
+        ],
+        [
+          508,
+          64
+        ],
+        [
+          503,
+          59
+        ],
+        [
+          501,
+          54
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "staphylococcus_aureus"
+    },
+    {
+      "line_color": null,
+      "shape_type": "polygon",
+      "points": [
+        [
+          453,
+          56
+        ],
+        [
+          454,
+          53
+        ],
+        [
+          453,
+          48
+        ],
+        [
+          448,
+          47
+        ],
+        [
+          448,
+          51
+        ],
+        [
+          448,
+          56
+        ]
+      ],
+      "flags": {},
+      "fill_color": null,
+      "label": "staphylococcus_aureus"
+    }
+  ],
+  "imageWidth": 640,
+  "imageHeight": 512
+}

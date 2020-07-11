@@ -1,0 +1,292 @@
+{
+  "shapes": [
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          316,
+          79
+        ],
+        [
+          318,
+          76
+        ],
+        [
+          325,
+          70
+        ],
+        [
+          323,
+          67
+        ],
+        [
+          316,
+          63
+        ],
+        [
+          314,
+          67
+        ],
+        [
+          310,
+          68
+        ],
+        [
+          311,
+          71
+        ],
+        [
+          310,
+          74
+        ],
+        [
+          312,
+          77
+        ],
+        [
+          313,
+          76
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          602,
+          63
+        ],
+        [
+          597,
+          55
+        ],
+        [
+          595,
+          57
+        ],
+        [
+          596,
+          60
+        ],
+        [
+          599,
+          65
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          608,
+          19
+        ],
+        [
+          611,
+          16
+        ],
+        [
+          609,
+          12
+        ],
+        [
+          604,
+          11
+        ],
+        [
+          604,
+          15
+        ],
+        [
+          606,
+          17
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          619,
+          180
+        ],
+        [
+          618,
+          179
+        ],
+        [
+          616,
+          176
+        ],
+        [
+          614,
+          178
+        ],
+        [
+          614,
+          181
+        ],
+        [
+          616,
+          185
+        ],
+        [
+          619,
+          186
+        ],
+        [
+          622,
+          185
+        ],
+        [
+          622,
+          181
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          502,
+          402
+        ],
+        [
+          490,
+          405
+        ],
+        [
+          489,
+          408
+        ],
+        [
+          490,
+          411
+        ],
+        [
+          490,
+          416
+        ],
+        [
+          492,
+          417
+        ],
+        [
+          493,
+          420
+        ],
+        [
+          498,
+          421
+        ],
+        [
+          500,
+          420
+        ],
+        [
+          501,
+          420
+        ],
+        [
+          505,
+          422
+        ],
+        [
+          509,
+          417
+        ],
+        [
+          508,
+          415
+        ],
+        [
+          512,
+          412
+        ],
+        [
+          511,
+          407
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    },
+    {
+      "label": "staphylococcus_aureus",
+      "line_color": null,
+      "fill_color": null,
+      "points": [
+        [
+          490,
+          382
+        ],
+        [
+          493,
+          381
+        ],
+        [
+          500,
+          376
+        ],
+        [
+          495,
+          367
+        ],
+        [
+          492,
+          365
+        ],
+        [
+          488,
+          365
+        ],
+        [
+          483,
+          369
+        ],
+        [
+          482,
+          371
+        ],
+        [
+          486,
+          377
+        ],
+        [
+          489,
+          374
+        ],
+        [
+          487,
+          378
+        ],
+        [
+          487,
+          381
+        ]
+      ],
+      "shape_type": "polygon",
+      "flags": {}
+    }
+  ],
+  "imageHeight": 512,
+  "imageWidth": 640
+}

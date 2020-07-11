@@ -1,0 +1,7 @@
+colab.sh
+__pycache__/
+.config/
+.pytest_cache/
+dataset/processed/
+sample_data/
+logs/*.zip
