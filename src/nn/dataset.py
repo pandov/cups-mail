@@ -45,7 +45,7 @@ def test_transform():
 
 class KSubset(Subset):
 
-    def __init__(self, dataset, indices, target, transform):
+    def __init__(self, dataset, indices, transform, target=None):
         super().__init__(dataset, indices)
         self.target = target
         self.transform = transform
@@ -82,8 +82,8 @@ class BACTERIA(ImageFolder):
             end = start + size
             train_idx = idx[:start] + idx[end:]
             valid_idx = idx[start:end]
-            train_dataset = KSubset(self, train_idx, target=self.target, transform=train_transform())
-            valid_dataset = KSubset(self, valid_idx, target=self.target, transform=valid_transform())
+            train_dataset = KSubset(self, train_idx, transform=train_transform(), target=self.target)
+            valid_dataset = KSubset(self, valid_idx, transform=valid_transform(), target=self.target)
             if batch_size is None:
                 datasets = {'train': train_dataset, 'valid': valid_dataset}
                 yield datasets
