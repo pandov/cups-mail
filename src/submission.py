@@ -1,11 +1,13 @@
 import torch
 import cv2
 import base64
+import numpy as np
 import pandas as pd
 from src.nn import get_segmentation_model, get_classification_model, get_class_names
 from src.dataset import Test
 from PIL import Image
 from torchvision import transforms
+from tqdm import tqdm
 
 sample_submission = './dataset/external/sample_submission.csv'
 output_submission = './dataset/processed/submission.csv'
@@ -39,20 +41,22 @@ if __name__ == '__main__':
     classification.load_state_dict(classification_weights['model_state_dict'])
     classification.eval()
 
-    for filepath, image in dataset:
+    for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
         image = transform(image).unsqueeze(0)
 
         predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
-        cv2.imwrite(savepath, predict_segmentation)
+        predict_segmentation -= predict_segmentation.min()
+        predict_segmentation *= 255 / predict_segmentation.max()
+        predict_mask = predict_segmentation.astype(np.uint8)
+        cv2.imwrite(savepath, predict_mask)
         with open(savepath, 'rb') as f:
             predict_base64 = str(base64.b64encode(f.read()), 'utf-8')
 
         predict_classification = classification(image).detach().squeeze(0)
         predict_probs = torch.softmax(predict_classification, dim=0)
         predict_label = class_names[predict_probs.argmax()]
-        df = df.append(adata(columns, filepath.stem, predict_label, predict_base64), ignore_index=True)
-        break
 
-    df.to_csv(output_submission, index=False)
+        df = df.append(adata(columns, filepath.stem, predict_label, predict_base64), ignore_index=True)
+        df.to_csv(output_submission, index=False)
