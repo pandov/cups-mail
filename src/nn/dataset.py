@@ -1,5 +1,4 @@
 import torch
-from pathlib import Path
 from numpy.random import permutation
 from torchvision.datasets import ImageFolder
 from torch.utils.data import DataLoader, Subset
@@ -16,7 +15,7 @@ def transform():
     return transforms.Compose([
         transforms.Grayscale(),
         transforms.ToTensor(),
-        # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
 class CrossValidationDataset(object):
@@ -40,7 +39,7 @@ class CrossValidationDataset(object):
 class BACTERIA(ImageFolder, CrossValidationDataset):
 
     def __init__(self, **kwargs):
-        kwargs['root'] = Path(f'dataset/processed/samples').absolute().as_posix()
+        kwargs['root'] = './dataset/processed/samples'
         kwargs['loader'] = loader
         kwargs['transform'] = transform()
         super().__init__(**kwargs)
