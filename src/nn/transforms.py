@@ -15,8 +15,8 @@ class Compose(transforms.Compose):
 class Grayscale(transforms.Grayscale):
 
     def __call__(self, img, mask):
-        # img = TF.to_grayscale(img, self.num_output_channels)
-        mask = TF.to_grayscale(mask, self.num_output_channels)
+        img = TF.to_grayscale(img, 3)
+        mask = TF.to_grayscale(mask, 1)
         return img, mask
 
 class ToTensor(transforms.ToTensor):
