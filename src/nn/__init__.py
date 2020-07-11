@@ -10,7 +10,7 @@ def get_segmentation_model():
 def get_classification_model(num_classes):
     import torchvision
     model = torchvision.models.resnet50(pretrained=True)
-    model.requires_grad_(False)
+    # model.requires_grad_(False)
     num_features = model.fc.in_features
     # model.fc = torch.nn.Sequential(
     #     torch.nn.Linear(num_features, num_features),
