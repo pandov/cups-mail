@@ -9,9 +9,14 @@ def get_segmentation_model():
 
 def get_classification_model(num_classes):
     import torchvision
-    model = torchvision.models.resnet18(pretrained=True)
+    model = torchvision.models.resnet50(pretrained=True)
     model.requires_grad_(False)
-    model.fc = torch.nn.Linear(in_features=model.fc.in_features, out_features=num_classes, bias=True)
+    num_features = model.fc.in_features
+    # model.fc = torch.nn.Sequential(
+    #     torch.nn.Linear(num_features, num_features),
+    #     torch.nn.Linear(num_features, num_classes),
+    # )
+    model.fc = torch.nn.Linear(num_features, num_classes)
     return model
 
 def get_class_names():
