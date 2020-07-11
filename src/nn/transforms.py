@@ -1,6 +1,7 @@
 import torch
 import torchvision.transforms.functional as TF
 from torchvision import transforms
+from PIL import ImageFilter
 
 class Compose(transforms.Compose):
     def __call__(self, img, mask):
@@ -30,6 +31,13 @@ class RandomRotation(transforms.RandomRotation):
         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
         return img, mask
 
+class RandomResizedCrop(transforms.RandomResizedCrop):
+    def __call__(self, img, mask):
+        i, j, h, w = self.get_params(img, self.scale, self.ratio)
+        img = TF.resized_crop(img, i, j, h, w, self.size, self.interpolation)
+        mask = TF.resized_crop(mask, i, j, h, w, self.size, self.interpolation)
+        return img, mask
+
 class RandomCrop(transforms.RandomCrop):
     def __call__(self, img, mask):
         if self.padding is not None:
@@ -53,6 +61,14 @@ class Resize(transforms.Resize):
     def __call__(self, img, mask):
         img = TF.resize(img, self.size, self.interpolation)
         mask = TF.resize(mask, self.size, self.interpolation)
+        return img, mask
+
+class RandomGaussianBlur(object):
+    def __call__(self, img, mask):
+        if torch.rand(1) < 0.5:
+            radius = torch.rand(1) * 2
+            blur = ImageFilter.GaussianBlur(radius)
+            img = img.filter(blur)
         return img, mask
 
 class Grayscale(transforms.Grayscale):
