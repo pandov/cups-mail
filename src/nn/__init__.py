@@ -1,7 +1,25 @@
+# from catalyst.contrib.nn import IoULoss, DiceLoss
 import torch
-from catalyst.contrib.nn import IoULoss#, DiceLoss
-from .dataset import BACTERIA
+from torch.nn import CrossEntropyLoss
 from .loss import DiceLoss
+from .dataset import BACTERIA
 
-def get_model():
+def get_segmentation_model():
     return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
+
+def get_classification_model(num_classes):
+    import torchvision
+    model = torchvision.models.resnet18(pretrained=True)
+    model.requires_grad_(False)
+    model.fc = torch.nn.Linear(in_features=model.fc.in_features, out_features=num_classes, bias=True)
+    return model
+
+def get_class_names():
+    return [
+        'c_kefir',
+        'ent_cloacae',
+        'klebsiella_pneumoniae',
+        'moraxella_catarrhalis',
+        'staphylococcus_aureus',
+        'staphylococcus_epidermidis',
+    ]

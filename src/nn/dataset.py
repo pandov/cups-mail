@@ -38,14 +38,19 @@ class CrossValidationDataset(object):
 
 class BACTERIA(ImageFolder, CrossValidationDataset):
 
-    def __init__(self, **kwargs):
+    def __init__(self, target=None, **kwargs):
         kwargs['root'] = './dataset/processed/samples'
         kwargs['loader'] = loader
         kwargs['transform'] = transform()
         super().__init__(**kwargs)
+        self.target = target
 
     def __getitem__(self, index):
         filepath, label = self.samples[index]
         image, mask = self.loader(filepath)
         image, mask = self.transform(image, mask)
-        return image, mask, label
+        if self.target is None:
+            return image, mask, label
+        else:
+            returns = {'mask': mask, 'label': label}
+            return image, returns[self.target]
