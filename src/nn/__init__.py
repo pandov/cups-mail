@@ -22,7 +22,10 @@ def get_classification_model(n, num_classes=6):
         model = torchvision.models.resnet50(pretrained=True)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     if n == 2:
-        model = torchvision.models.vgg16_bn(pretrained=True)
+        model = torchvision.models.vgg11_bn(pretrained=True)
+        model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, num_classes)
+    if n == 3:
+        model = torchvision.models.vgg16(pretrained=True)
         model.features.requires_grad_(False)
         model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, num_classes)
     return model
