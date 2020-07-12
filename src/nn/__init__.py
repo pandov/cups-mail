@@ -1,23 +1,26 @@
 # from catalyst.contrib.nn import IoULoss, DiceLoss
 import torch
+import torchvision
 from torch.nn import CrossEntropyLoss
 from .loss import DiceLoss
 from .dataset import BACTERIA
 
-def get_segmentation_model():
-    return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
+def get_segmentation_components(n):
+    if n == 1:
+        model = torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
+        model.train()
+        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
+        return model, optimizer, scheduler
 
-def get_classification_model(num_classes):
-    import torchvision
-    model = torchvision.models.resnet50(pretrained=True)
-    # model.requires_grad_(False)
-    num_features = model.fc.in_features
-    # model.fc = torch.nn.Sequential(
-    #     torch.nn.Linear(num_features, num_features),
-    #     torch.nn.Linear(num_features, num_classes),
-    # )
-    model.fc = torch.nn.Linear(num_features, num_classes)
-    return model
+def get_classification_model(n, num_classes=6):
+    if n == 1:
+        model = torchvision.models.resnet50(pretrained=True)
+        model.train()
+        model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
+        optimizer = torch.optim.Adam(model.parameters(), lr=1e-3)
+        scheduler = torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
+        return model, optimizer, scheduler
 
 def get_class_names():
     return [

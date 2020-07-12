@@ -3,7 +3,7 @@ import cv2
 import base64
 import numpy as np
 import pandas as pd
-from src.nn import get_segmentation_model, get_classification_model, get_class_names
+from src.nn import get_segmentation_components, get_classification_components, get_class_names
 from src.dataset import Test
 from PIL import Image
 from torchvision import transforms
@@ -32,11 +32,11 @@ if __name__ == '__main__':
 
     class_names = get_class_names()
 
-    segmentation = get_segmentation_model()
+    segmentation = get_segmentation_components(1)[0]
     segmentation_weights = torch.load(segmentation_best)
     segmentation.load_state_dict(segmentation_weights['model_state_dict'])
     segmentation.eval()
-    classification = get_classification_model(len(class_names))
+    classification = get_classification_components(1)[0]
     classification_weights = torch.load(classification_best)
     classification.load_state_dict(classification_weights['model_state_dict'])
     classification.eval()
