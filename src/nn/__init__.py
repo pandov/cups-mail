@@ -35,7 +35,7 @@ def get_optimizer(n, model):
     if n == 1:
         return torch.optim.Adam(model.parameters(), lr=1e-3)
     elif n == 2:
-        return torch.optim.RMSprop(model.parameters(), lr=1e-2)
+        return torch.optim.RMSprop(model.parameters(), lr=1e-3)
 
 def get_scheduler(n, optimizer):
     if n == 1:
