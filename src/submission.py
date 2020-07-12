@@ -10,7 +10,7 @@ from torchvision import transforms
 from tqdm import tqdm
 
 sample_submission = './dataset/external/sample_submission.csv'
-output_submission = './dataset/processed/submission.csv'
+output_submission = './logs/submission.csv'
 predicted_masks = './dataset/processed/tests/'
 segmentation_best = './logs/segmentation/checkpoints/best.pth'
 classification_best = './logs/classification/checkpoints/best.pth'
