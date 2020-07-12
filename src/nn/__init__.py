@@ -44,11 +44,11 @@ def get_scheduler(n, optimizer):
 def get_segmentation_components(m, o, s):
     from .loss import DiceLoss
     model = get_segmentation_model(m)
-    criterion = DiceLoss()
     optimizer = get_optimizer(o, model)
     scheduler = get_scheduler(s, optimizer)
+    criterion = DiceLoss()
     callbacks = [IouCallback()]
-    return model, optimizer, scheduler, callbacks
+    return model, optimizer, scheduler, criterion, callbacks
 
 def get_classification_components(m, o, s):
     from torch.nn import CrossEntropyLoss
@@ -57,4 +57,4 @@ def get_classification_components(m, o, s):
     optimizer = get_optimizer(o, model)
     scheduler = get_scheduler(s, optimizer)
     callbacks = [ConfusionMatrixCallback(class_names=class_names)]
-    return model, criterion, optimizer, scheduler, callbacks
+    return model, optimizer, scheduler, criterion, callbacks
