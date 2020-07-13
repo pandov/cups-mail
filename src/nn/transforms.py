@@ -24,12 +24,12 @@ class RandomVerticalFlip(transforms.RandomVerticalFlip):
             mask = TF.vflip(mask)
         return img, mask
 
-# class RandomRotation(transforms.RandomRotation):
-#     def __call__(self, img, mask):
-#         angle = self.get_params(self.degrees)
-#         img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
-#         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
-#         return img, mask
+class RandomRotation(transforms.RandomRotation):
+    def __call__(self, img, mask):
+        angle = self.get_params(self.degrees)
+        img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
+        mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
+        return img, mask
 
 class RandomRotation180(object):
     def __call__(self, img, mask):
@@ -37,6 +37,14 @@ class RandomRotation180(object):
         angle = 180 * rot
         img = TF.rotate(img, angle)
         mask = TF.rotate(mask, angle)
+        return img, mask
+
+class RandomRotation90(object):
+    def __call__(self, img, mask):
+        rot = torch.randint(0, 5, (1,))
+        angle = 90 * rot
+        img = TF.rotate(img, angle, False, True)
+        mask = TF.rotate(mask, angle, False, True)
         return img, mask
 
 class RandomPerspective(transforms.RandomPerspective):
@@ -50,7 +58,6 @@ class RandomPerspective(transforms.RandomPerspective):
 
 class RandomResizedCrop(transforms.RandomResizedCrop):
     def __call__(self, img, mask):
-        self.size = img.size[::-1]
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         img = TF.resized_crop(img, i, j, h, w, self.size, self.interpolation)
         mask = TF.resized_crop(mask, i, j, h, w, self.size, self.interpolation)
@@ -100,9 +107,10 @@ class ColorJitter(transforms.ColorJitter):
 
 class RandomGaussianBlur(object):
     def __call__(self, img, mask):
-        radius = torch.rand(1) * 1.5
-        blur = ImageFilter.GaussianBlur(radius)
-        img = img.filter(blur)
+        if torch.rand(1) < 0.5:
+            radius = torch.rand(1) * 2
+            blur = ImageFilter.GaussianBlur(radius)
+            img = img.filter(blur)
         return img, mask
 
 class Grayscale(transforms.Grayscale):
