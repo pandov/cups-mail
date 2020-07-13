@@ -15,11 +15,12 @@ def loader(image_path):
 
 def train_transform():
     return transforms.Compose([
+        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.5, hue=0.5),
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
         transforms.RandomRotation180(),
-        transforms.RandomPerspective(distortion_scale=0.05),
-        transforms.RandomResizedCrop(size=(512, 640), scale=(0.75, 1.0), ratio=(0.9, 1.1)),
+        transforms.RandomPerspective(distortion_scale=0.1),
+        transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
         transforms.RandomGaussianBlur(),
         transforms.Grayscale(),
         transforms.ToTensor(),

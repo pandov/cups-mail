@@ -56,6 +56,35 @@ class RandomResizedCrop(transforms.RandomResizedCrop):
         mask = TF.resized_crop(mask, i, j, h, w, self.size, self.interpolation)
         return img, mask
 
+class ColorJitter(transforms.ColorJitter):
+    def __call__(self, img, mask):
+        fn_idx = torch.randperm(4)
+        for fn_id in fn_idx:
+            if fn_id == 0 and self.brightness is not None:
+                brightness = self.brightness
+                brightness_factor = torch.tensor(1.0).uniform_(brightness[0], brightness[1]).item()
+                img = TF.adjust_brightness(img, brightness_factor)
+                mask = TF.adjust_brightness(mask, brightness_factor)
+
+            if fn_id == 1 and self.contrast is not None:
+                contrast = self.contrast
+                contrast_factor = torch.tensor(1.0).uniform_(contrast[0], contrast[1]).item()
+                img = TF.adjust_contrast(img, contrast_factor)
+                mask = TF.adjust_contrast(mask, contrast_factor)
+
+            if fn_id == 2 and self.saturation is not None:
+                saturation = self.saturation
+                saturation_factor = torch.tensor(1.0).uniform_(saturation[0], saturation[1]).item()
+                img = TF.adjust_saturation(img, saturation_factor)
+                mask = TF.adjust_saturation(mask, saturation_factor)
+
+            if fn_id == 3 and self.hue is not None:
+                hue = self.hue
+                hue_factor = torch.tensor(1.0).uniform_(hue[0], hue[1]).item()
+                img = TF.adjust_hue(img, hue_factor)
+                mask = TF.adjust_hue(mask, hue_factor)
+        return img, mask
+
 # class RandomCrop(transforms.RandomCrop):
 #     def __call__(self, img, mask):
 #         i, j, h, w = self.get_params(img, self.size)
