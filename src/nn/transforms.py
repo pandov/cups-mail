@@ -24,40 +24,50 @@ class RandomVerticalFlip(transforms.RandomVerticalFlip):
             mask = TF.vflip(mask)
         return img, mask
 
-class RandomRotation(transforms.RandomRotation):
-    def __call__(self, img, mask):
-        angle = self.get_params(self.degrees)
-        img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
-        mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
-        return img, mask
+# class RandomRotation(transforms.RandomRotation):
+#     def __call__(self, img, mask):
+#         angle = self.get_params(self.degrees)
+#         img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
+#         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
+#         return img, mask
 
-class RandomRotation90(object):
+class RandomRotation180(object):
     def __call__(self, img, mask):
-        rot = torch.randint(0, 5, (1,))
-        angle = 90 * rot
+        rot = torch.randint(0, 2, (1,))
+        angle = 180 * rot
         img = TF.rotate(img, angle)
         mask = TF.rotate(mask, angle)
         return img, mask
 
+class RandomPerspective(transforms.RandomPerspective):
+    def __call__(self, img, mask):
+        if torch.rand(1) < self.p:
+            width, height = img.size
+            startpoints, endpoints = self.get_params(width, height, self.distortion_scale)
+            img = TF.perspective(img, startpoints, endpoints, self.interpolation)
+            mask = TF.perspective(mask, startpoints, endpoints, self.interpolation)
+        return img, mask
+
 class RandomResizedCrop(transforms.RandomResizedCrop):
     def __call__(self, img, mask):
+        self.size = img.size[::-1]
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
         img = TF.resized_crop(img, i, j, h, w, self.size, self.interpolation)
         mask = TF.resized_crop(mask, i, j, h, w, self.size, self.interpolation)
         return img, mask
 
-class RandomCrop(transforms.RandomCrop):
-    def __call__(self, img, mask):
-        i, j, h, w = self.get_params(img, self.size)
-        img = TF.crop(img, i, j, h, w)
-        mask = TF.crop(mask, i, j, h, w)
-        return img, mask
+# class RandomCrop(transforms.RandomCrop):
+#     def __call__(self, img, mask):
+#         i, j, h, w = self.get_params(img, self.size)
+#         img = TF.crop(img, i, j, h, w)
+#         mask = TF.crop(mask, i, j, h, w)
+#         return img, mask
 
-class Resize(transforms.Resize):
-    def __call__(self, img, mask):
-        img = TF.resize(img, self.size, self.interpolation)
-        mask = TF.resize(mask, self.size, self.interpolation)
-        return img, mask
+# class Resize(transforms.Resize):
+#     def __call__(self, img, mask):
+#         img = TF.resize(img, self.size, self.interpolation)
+#         mask = TF.resize(mask, self.size, self.interpolation)
+#         return img, mask
 
 class RandomGaussianBlur(object):
     def __call__(self, img, mask):

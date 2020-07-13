@@ -33,13 +33,13 @@ def test_dataset():
     datasets = next(dataset.crossval(2))
     size = lambda x: 'x'.join(map(str, x.shape))
     for i, (filename, image, mask, label) in enumerate(datasets['train']):
-        if i == 10: break
+        # if i == 10: break
         image = _torch2cv(image, np.uint8)
         mask = _torch2cv(mask, np.uint8)
         cv2.imshow(f'sample-{filename}-{size(image)}', image)
         cv2.imshow(f'mask-{filename}-{size(mask)}', mask)
         cv2.waitKey(0)
-    cv2.destroyAllWindows()
+        cv2.destroyAllWindows()
 
 test_dataset()
 
