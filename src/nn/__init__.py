@@ -50,7 +50,7 @@ def get_optimizer(n, model):
 
 def get_scheduler(n, optimizer):
     if n == 1:
-        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
+        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
     elif n == 2:
         return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=3, min_lr=0.00001, verbose=True)
     else:
