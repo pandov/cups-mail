@@ -17,10 +17,8 @@ def train_transform():
     return transforms.Compose([
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
-        transforms.RandomRotation(30),
-        # transforms.RandomCrop((512 // 4 * 3, 640 // 4 * 3)),
-        # transforms.Resize((512, 640)),
-        transforms.RandomResizedCrop(size=(512, 640), scale=(0.75, 1.0), ratio=(0.9, 1.1)),
+        transforms.RandomRotation90(),
+        transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(1.0, 1.0)),
         transforms.RandomGaussianBlur(),
         transforms.Grayscale(),
         transforms.ToTensor(),

@@ -31,6 +31,14 @@ class RandomRotation(transforms.RandomRotation):
         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
         return img, mask
 
+class RandomRotation90(object):
+    def __call__(self, img, mask):
+        rot = torch.randint(0, 5, (1,))
+        angle = 90 * rot
+        img = TF.rotate(img, angle)
+        mask = TF.rotate(mask, angle)
+        return img, mask
+
 class RandomResizedCrop(transforms.RandomResizedCrop):
     def __call__(self, img, mask):
         i, j, h, w = self.get_params(img, self.scale, self.ratio)
@@ -40,18 +48,6 @@ class RandomResizedCrop(transforms.RandomResizedCrop):
 
 class RandomCrop(transforms.RandomCrop):
     def __call__(self, img, mask):
-        if self.padding is not None:
-            img = TF.pad(img, self.padding, self.fill, self.padding_mode)
-            mask = TF.pad(mask, self.padding, self.fill, self.padding_mode)
-
-        if self.pad_if_needed and img.size[0] < self.size[1] and mask.size[0] < self.size[1]:
-            img = TF.pad(img, (self.size[1] - img.size[0], 0), self.fill, self.padding_mode)
-            mask = TF.pad(mask, (self.size[1] - mask.size[0], 0), self.fill, self.padding_mode)
-
-        if self.pad_if_needed and img.size[1] < self.size[0] and mask.size[1] < self.size[0]:
-            img = TF.pad(img, (0, self.size[0] - img.size[1]), self.fill, self.padding_mode)
-            mask = TF.pad(mask, (0, self.size[0] - mask.size[1]), self.fill, self.padding_mode)
-
         i, j, h, w = self.get_params(img, self.size)
         img = TF.crop(img, i, j, h, w)
         mask = TF.crop(mask, i, j, h, w)
@@ -65,10 +61,9 @@ class Resize(transforms.Resize):
 
 class RandomGaussianBlur(object):
     def __call__(self, img, mask):
-        if torch.rand(1) < 0.5:
-            radius = torch.rand(1) * 2
-            blur = ImageFilter.GaussianBlur(radius)
-            img = img.filter(blur)
+        radius = torch.rand(1) * 1.5
+        blur = ImageFilter.GaussianBlur(radius)
+        img = img.filter(blur)
         return img, mask
 
 class Grayscale(transforms.Grayscale):

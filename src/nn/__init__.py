@@ -17,17 +17,21 @@ class_names = [
 ]
 
 def get_classification_model(n, num_classes=6):
-    import torchvision
+    from torchvision import models
     if n == 1:
-        model = torchvision.models.resnet50(pretrained=True)
+        model = models.resnet50(pretrained=True)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
-    if n == 2:
-        model = torchvision.models.vgg11_bn(pretrained=True)
-        model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, num_classes)
-    if n == 3:
-        model = torchvision.models.vgg16(pretrained=True)
+    elif n == 2:
+        model = models.vgg11_bn(pretrained=True)
+        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
+    elif n == 3:
+        model = models.vgg16(pretrained=True)
         model.features.requires_grad_(False)
-        model.classifier[6] = torch.nn.Linear(model.classifier[6].in_features, num_classes)
+        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
+    elif n == 4:
+        model = models.alexnet(pretrained=True)
+        model.features.requires_grad_(False)
+        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     return model
 
 def get_segmentation_model(n):
@@ -38,13 +42,21 @@ def get_optimizer(n, model):
     if n == 1:
         return torch.optim.Adam(model.parameters(), lr=1e-3)
     elif n == 2:
+        return torch.optim.SGD(model.parameters(), lr=0.01, momentum=0.99)
+    elif n == 3:
         return torch.optim.RMSprop(model.parameters(), lr=1e-3)
+    else:
+        return None
 
 def get_scheduler(n, optimizer):
     if n == 1:
         return torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
+    elif n == 2:
+        return torch.optim.lr_scheduler.ReduceLROnPlateau(factor=0.1, patience=3, min_lr=0.00001, verbose=True)
+    else:
+        return None
 
-def get_segmentation_components(m, o, s):
+def get_segmentation_components(m, o=-1, s=-1):
     from .loss import DiceLoss
     model = get_segmentation_model(m)
     optimizer = get_optimizer(o, model)
@@ -53,7 +65,7 @@ def get_segmentation_components(m, o, s):
     callbacks = [IouCallback()]
     return model, optimizer, scheduler, criterion, callbacks
 
-def get_classification_components(m, o, s):
+def get_classification_components(m, o=-1, s=-1):
     from torch.nn import CrossEntropyLoss
     model = get_classification_model(m)
     criterion = CrossEntropyLoss()

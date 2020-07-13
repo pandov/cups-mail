@@ -66,4 +66,5 @@ def main():
         set_metrics(file)
     calculate_metrics()
 
-main()
+if __name__ == '__main__':
+    main()
