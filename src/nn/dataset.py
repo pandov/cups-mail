@@ -15,7 +15,7 @@ def loader(image_path):
 
 def train_transform():
     return transforms.Compose([
-        # transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.5, hue=0.5),
+        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.4, hue=0.4),
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
         transforms.RandomRotation90(),

@@ -47,8 +47,8 @@ if __name__ == '__main__':
         predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
         predict_segmentation -= predict_segmentation.min()
         predict_segmentation /= predict_segmentation.max()
-        predict_segmentation[predict_segmentation < 0.5] = 0
-        predict_segmentation[predict_segmentation >= 0.5] = 1
+        predict_segmentation[predict_segmentation < 0.4] = 0
+        predict_segmentation[predict_segmentation >= 0.4] = 1
         predict_segmentation *= 255
         predict_mask = predict_segmentation.astype(np.uint8)
         cv2.imwrite(savepath, predict_mask)

@@ -115,7 +115,7 @@ class RandomGaussianBlur(object):
 
 class Grayscale(transforms.Grayscale):
     def __call__(self, img, mask):
-        img = TF.to_grayscale(img, 3)
+        # img = TF.to_grayscale(img, 3)
         mask = TF.to_grayscale(mask, 1)
         return img, mask
 
