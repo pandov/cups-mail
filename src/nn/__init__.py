@@ -5,7 +5,7 @@ from .dataset import BACTERIA
 from catalyst.dl import SupervisedRunner, ConfusionMatrixCallback, IouCallback
 from catalyst.utils import set_global_seed, prepare_cudnn
 prepare_cudnn(deterministic=True)
-set_global_seed(0)
+set_global_seed(17)
 
 class_names = [
     'c_kefir',

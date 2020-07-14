@@ -15,13 +15,13 @@ def loader(image_path):
 
 def train_transform():
     return transforms.Compose([
-        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.5, hue=0.5),
+        # transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.5, hue=0.5),
         transforms.RandomHorizontalFlip(),
         transforms.RandomVerticalFlip(),
         transforms.RandomRotation90(),
         transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
-        transforms.RandomPerspective(distortion_scale=0.1),
-        transforms.RandomRotation(20),
+        # transforms.RandomPerspective(distortion_scale=0.1),
+        # transforms.RandomRotation(20),
         transforms.RandomGaussianBlur(),
         transforms.Grayscale(),
         transforms.ToTensor(),
@@ -30,6 +30,8 @@ def train_transform():
 
 def valid_transform():
     return transforms.Compose([
+        # transforms.RandomHorizontalFlip(),
+        # transforms.RandomVerticalFlip(),
         transforms.Grayscale(),
         transforms.ToTensor(),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
@@ -81,6 +83,7 @@ class BACTERIA(ImageFolder):
                 yield datasets
             else:
                 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, drop_last=True)
-                valid_dataloader = DataLoader(valid_dataset, batch_size=batch_size)
+                valid_batch_size = min(batch_size, len(valid_dataset))
+                valid_dataloader = DataLoader(valid_dataset, batch_size=valid_batch_size)
                 loaders = {'train': train_dataloader, 'valid': valid_dataloader}
                 yield loaders

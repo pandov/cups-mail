@@ -24,20 +24,20 @@ class RandomVerticalFlip(transforms.RandomVerticalFlip):
             mask = TF.vflip(mask)
         return img, mask
 
-class RandomRotation(transforms.RandomRotation):
-    def __call__(self, img, mask):
-        angle = self.get_params(self.degrees)
-        img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
-        mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
-        return img, mask
+# class RandomRotation(transforms.RandomRotation):
+#     def __call__(self, img, mask):
+#         angle = self.get_params(self.degrees)
+#         img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
+#         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
+#         return img, mask
 
-class RandomRotation180(object):
-    def __call__(self, img, mask):
-        rot = torch.randint(0, 2, (1,))
-        angle = 180 * rot
-        img = TF.rotate(img, angle)
-        mask = TF.rotate(mask, angle)
-        return img, mask
+# class RandomRotation180(object):
+#     def __call__(self, img, mask):
+#         rot = torch.randint(0, 2, (1,))
+#         angle = 180 * rot
+#         img = TF.rotate(img, angle)
+#         mask = TF.rotate(mask, angle)
+#         return img, mask
 
 class RandomRotation90(object):
     def __call__(self, img, mask):
@@ -127,6 +127,16 @@ class ToTensor(transforms.ToTensor):
 
 class Normalize(transforms.Normalize):
     def __call__(self, img, mask):
+        img -= img.min()
+        img /= img.max()
         img = TF.normalize(img, self.mean, self.std, self.inplace)
+
+        # mean = img.mean()
+        # std = img.std()
+        # img = (img - mean) / std
+
+        # img -= img.mean()
+        # img /= img.std()
+
         # mask = TF.normalize(mask, self.mean, self.std, self.inplace)
         return img, mask
