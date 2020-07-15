@@ -18,15 +18,17 @@ def test_dataset_external_train():
     from src.dataset import Train
     _test_dataset_external(Train())
 
+import cv2
+
 def _torch2cv(tensor, dtype):
     tensor = tensor.permute(1, 2, 0)
     tensor -= tensor.min()
     tensor *= 255 / tensor.max()
     image = tensor.numpy().astype(dtype)
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     return image
 
 def test_dataset():
-    import cv2
     import numpy as np
     from src.nn import BACTERIA
     dataset = BACTERIA()

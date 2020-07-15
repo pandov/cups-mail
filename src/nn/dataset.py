@@ -25,7 +25,8 @@ def train_transform():
         transforms.RandomGaussianBlur(),
         transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        transforms.Negative(),
+        transforms.Normalize(),
     ])
 
 def valid_transform():
@@ -34,7 +35,8 @@ def valid_transform():
         # transforms.RandomVerticalFlip(),
         transforms.Grayscale(),
         transforms.ToTensor(),
-        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        transforms.Negative(),
+        transforms.Normalize(),
     ])
 
 class KSubset(Subset):

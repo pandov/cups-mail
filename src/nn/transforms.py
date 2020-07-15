@@ -119,6 +119,11 @@ class Grayscale(transforms.Grayscale):
         mask = TF.to_grayscale(mask, 1)
         return img, mask
 
+class Negative(transforms.Grayscale):
+    def __call__(self, img, mask):
+        img = 1 - img
+        return img, mask
+
 class ToTensor(transforms.ToTensor):
     def __call__(self, img, mask):
         img = TF.to_tensor(img)
@@ -126,6 +131,9 @@ class ToTensor(transforms.ToTensor):
         return img, mask
 
 class Normalize(transforms.Normalize):
+    def __init__(self):
+        super().__init__((0.485, 0.456, 0.406), (0.229, 0.224, 0.225), inplace=False)
+
     def __call__(self, img, mask):
         img -= img.min()
         img /= img.max()
@@ -134,6 +142,8 @@ class Normalize(transforms.Normalize):
         # mean = img.mean()
         # std = img.std()
         # img = (img - mean) / std
+
+        # print(float(img.min()), float(img.max()))
 
         # img -= img.mean()
         # img /= img.std()
