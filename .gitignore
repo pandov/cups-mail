@@ -6,4 +6,4 @@ __pycache__/
 dataset/processed/
 sample_data/
 logs/*.zip
-logs/*/checkpoints/*_full.pth
+logs/*/*/checkpoints/*_full.pth

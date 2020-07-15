@@ -12,8 +12,10 @@ from tqdm import tqdm
 sample_submission = './dataset/external/sample_submission.csv'
 output_submission = './logs/submission.csv'
 predicted_masks = './dataset/processed/tests/'
-segmentation_best = './logs/segmentation/checkpoints/best.pth'
-classification_best = './logs/classification/checkpoints/best.pth'
+date = '15-07-20'
+num_experiment = 0
+segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
+classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
 
 def addata(columns, *args):
     return dict(zip(columns, args))
