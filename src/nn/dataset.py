@@ -10,64 +10,76 @@ def loader(image_path):
     image = default_loader(image_path)
     mask_path = image_path.replace('samples', 'masks')
     mask = default_loader(mask_path)
-    # assert image.size == mask.size, 'Size mismatch'
     return image, mask
 
-def train_transform():
-    return transforms.Compose([
-        transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.4, hue=0.4),
-        transforms.RandomHorizontalFlip(),
-        transforms.RandomVerticalFlip(),
-        transforms.RandomRotation90(),
-        transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
-        # transforms.RandomPerspective(distortion_scale=0.1),
-        # transforms.RandomRotation(20),
-        transforms.RandomGaussianBlur(),
-        transforms.Grayscale(),
-        transforms.ToTensor(),
-        transforms.Negative(),
-        transforms.Normalize(),
-    ])
+def set_rotation_by_apply_mask(apply_mask):
+    if apply_mask:
+        return transforms.RandomRotation(180)
+    else:
+        return transforms.RandomRotation90()
+    
+def set_perspective_by_apply_mask(apply_mask):
+    if apply_mask:
+        return transforms.RandomPerspective(distortion_scale=0.1)
+    else:
+        return transforms.Lambda(lambda x: x)
 
-def valid_transform():
-    return transforms.Compose([
-        # transforms.RandomHorizontalFlip(),
-        # transforms.RandomVerticalFlip(),
-        transforms.Grayscale(),
-        transforms.ToTensor(),
-        transforms.Negative(),
-        transforms.Normalize(),
-    ])
+def get_stages_transform(apply_mask):
+    return {
+        'train': transforms.Compose([
+            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.2, hue=0.2),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            set_rotation_by_apply_mask(apply_mask),
+            set_perspective_by_apply_mask(apply_mask),
+            transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
+            transforms.RandomGaussianBlur(1),
+            transforms.Grayscale(),
+            transforms.ToTensor(),
+            transforms.Negative(),
+            transforms.Normalize(),
+        ]),
+        'valid': transforms.Compose([
+            transforms.Grayscale(),
+            transforms.ToTensor(),
+            transforms.Negative(),
+            transforms.Normalize(),
+        ]),
+    }
 
-class KSubset(Subset):
+class StageSubset(Subset):
 
-    def __init__(self, dataset, indices, transform, target=None):
+    def __init__(self, dataset, indices, stage):
         super().__init__(dataset, indices)
-        self.target = target
-        self.transform = transform
+        self.stage = stage
 
     def __getitem__(self, idx):
-        filename, image, mask, label = self.dataset[self.indices[idx]]
-        image, mask = self.transform(image, mask)
-        if self.target is None:
-            return filename, image, mask, label
-        else:
-            returns = {'mask': mask, 'label': label}
-            return image, returns[self.target]
+        return self.dataset.getitem(self.indices[idx], self.stage)
 
 class BACTERIA(ImageFolder):
 
-    def __init__(self, target=None, **kwargs):
+    def __init__(self, keys, apply_mask=False, **kwargs):
         kwargs['root'] = './dataset/processed/samples'
         kwargs['loader'] = loader
+        kwargs['transform'] = get_stages_transform(apply_mask)
         super().__init__(**kwargs)
-        self.target = target
+        self.keys = keys
+        self.apply_mask = apply_mask
+
+    def getitem(self, index, stage='train'):
+        filepath, label = self.samples[index]
+        name = os.path.splitext(filepath)[0][-3:]
+        image, mask = self.loader(filepath)
+        if stage is not None:
+            image, mask = self.transform[stage](image, mask)
+            if self.apply_mask:
+                image[:, mask[0] == 0] = 0
+        
+        items = {'name': name, 'image': image, 'mask': mask, 'label': label}
+        return [items[key] for key in self.keys]
 
     def __getitem__(self, index):
-        filepath, label = self.samples[index]
-        filename = os.path.splitext(filepath)[0][-3:]
-        image, mask = self.loader(filepath)
-        return filename, image, mask, label
+        return self.getitem(index)
 
     def crossval(self, kfold, batch_size=None):
         length = len(self)
@@ -78,8 +90,8 @@ class BACTERIA(ImageFolder):
             end = start + size
             train_idx = idx[:start] + idx[end:]
             valid_idx = idx[start:end]
-            train_dataset = KSubset(self, train_idx, transform=train_transform(), target=self.target)
-            valid_dataset = KSubset(self, valid_idx, transform=valid_transform(), target=self.target)
+            train_dataset = StageSubset(self, train_idx, stage='train')
+            valid_dataset = StageSubset(self, valid_idx, stage='valid')
             if batch_size is None:
                 datasets = {'train': train_dataset, 'valid': valid_dataset}
                 yield datasets

@@ -4,17 +4,19 @@ torch.cuda.empty_cache()
 from .dataset import BACTERIA
 from catalyst.dl import SupervisedRunner, ConfusionMatrixCallback, IouCallback
 from catalyst.utils import set_global_seed, prepare_cudnn
+
 prepare_cudnn(deterministic=True)
 set_global_seed(7)
 
-class_names = [
-    'c_kefir',
-    'ent_cloacae',
-    'klebsiella_pneumoniae',
-    'moraxella_catarrhalis',
-    'staphylococcus_aureus',
-    'staphylococcus_epidermidis',
-]
+def get_class_names():
+    return [
+        'c_kefir',
+        'ent_cloacae',
+        'klebsiella_pneumoniae',
+        'moraxella_catarrhalis',
+        'staphylococcus_aureus',
+        'staphylococcus_epidermidis',
+    ]
 
 def get_classification_model(n, num_classes=6):
     from torchvision import models
@@ -74,5 +76,5 @@ def get_classification_components(m, o=-1, s=-1):
     criterion = CrossEntropyLoss()
     optimizer = get_optimizer(o, model)
     scheduler = get_scheduler(s, optimizer)
-    callbacks = [ConfusionMatrixCallback(class_names=class_names)]
+    callbacks = [ConfusionMatrixCallback(class_names=get_class_names())]
     return model, optimizer, scheduler, criterion, callbacks

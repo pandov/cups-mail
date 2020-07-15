@@ -24,12 +24,12 @@ class RandomVerticalFlip(transforms.RandomVerticalFlip):
             mask = TF.vflip(mask)
         return img, mask
 
-# class RandomRotation(transforms.RandomRotation):
-#     def __call__(self, img, mask):
-#         angle = self.get_params(self.degrees)
-#         img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
-#         mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
-#         return img, mask
+class RandomRotation(transforms.RandomRotation):
+    def __call__(self, img, mask):
+        angle = self.get_params(self.degrees)
+        img = TF.rotate(img, angle, self.resample, self.expand, self.center, self.fill)
+        mask = TF.rotate(mask, angle, self.resample, self.expand, self.center, self.fill)
+        return img, mask
 
 # class RandomRotation180(object):
 #     def __call__(self, img, mask):
@@ -90,6 +90,7 @@ class ColorJitter(transforms.ColorJitter):
                 hue_factor = torch.tensor(1.0).uniform_(hue[0], hue[1]).item()
                 img = TF.adjust_hue(img, hue_factor)
                 mask = TF.adjust_hue(mask, hue_factor)
+
         return img, mask
 
 # class RandomCrop(transforms.RandomCrop):
@@ -106,9 +107,13 @@ class ColorJitter(transforms.ColorJitter):
 #         return img, mask
 
 class RandomGaussianBlur(object):
+    def __init__(self, radius, p=0.5):
+        self.radius = radius
+        self.p = p
+
     def __call__(self, img, mask):
-        if torch.rand(1) < 0.5:
-            radius = torch.rand(1) * 2
+        if torch.rand(1) < self.p:
+            radius = torch.rand(1) * self.radius
             blur = ImageFilter.GaussianBlur(radius)
             img = img.filter(blur)
         return img, mask
@@ -137,7 +142,7 @@ class Normalize(transforms.Normalize):
     def __call__(self, img, mask):
         img -= img.min()
         img /= img.max()
-        img = TF.normalize(img, self.mean, self.std, self.inplace)
+        # img = TF.normalize(img, self.mean, self.std, self.inplace)
 
         # mean = img.mean()
         # std = img.std()
