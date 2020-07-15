@@ -22,13 +22,16 @@ def get_classification_model(n, num_classes=6):
         model = models.resnet50(pretrained=True)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     elif n == 2:
-        model = models.vgg11_bn(pretrained=True)
+        model = models.vgg11(pretrained=True)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif n == 3:
+        model = models.vgg13(pretrained=True)
+        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
+    elif n == 4:
         model = models.vgg16(pretrained=True)
         model.features.requires_grad_(False)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
-    elif n == 4:
+    elif n == 5:
         model = models.alexnet(pretrained=True)
         model.features.requires_grad_(False)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
