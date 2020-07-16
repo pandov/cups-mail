@@ -95,9 +95,9 @@ def get_classification_components(m, o=None, s=None):
         get_classification_model(m), CrossEntropyLoss(), [ConfusionMatrixCallback(class_names=get_class_names())])
 
 def get_multimodel_components(m, o=None, s=None):
+    from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
     from .loss import DiceLoss
-    from .callbacks import ConfusionMatrixCallback
     criterion = {
         'dice': DiceLoss(),
         'crossentropy': CrossEntropyLoss(),
