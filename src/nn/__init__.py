@@ -69,36 +69,37 @@ def get_scheduler(name, optimizer):
     else:
         return None
 
+def get_dict_components(o, s, model, criterion, callbacks):
+    model = model.train()
+    optimizer = get_optimizer(o, model)
+    scheduler = get_scheduler(s, optimizer)
+    return {
+        'model': model,
+        'optimizer': optimizer,
+        'scheduler': scheduler,
+        'criterion': criterion,
+        'callbacks': callbacks,
+    }
+
 def get_segmentation_components(m, o=None, s=None):
     from catalyst.dl import IouCallback
     from .loss import DiceLoss
-    model = get_segmentation_model(m)
-    optimizer = get_optimizer(o, model)
-    scheduler = get_scheduler(s, optimizer)
-    criterion = DiceLoss()
-    callbacks = [IouCallback()]
-    return model, optimizer, scheduler, criterion, callbacks
+    return get_dict_components(o, s,
+        get_segmentation_model(m), DiceLoss(), [IouCallback()])
 
 def get_classification_components(m, o=None, s=None):
     from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
-    model = get_classification_model(m)
-    criterion = CrossEntropyLoss()
-    optimizer = get_optimizer(o, model)
-    scheduler = get_scheduler(s, optimizer)
-    callbacks = [ConfusionMatrixCallback(class_names=get_class_names())]
-    return model, optimizer, scheduler, criterion, callbacks
+    return get_dict_components(o, s,
+        get_classification_model(m), CrossEntropyLoss(), [ConfusionMatrixCallback(class_names=get_class_names())])
 
 def get_multimodel_components(m, o=None, s=None):
     from torch.nn import CrossEntropyLoss
     from .loss import DiceLoss
     from .callbacks import ConfusionMatrixCallback
-    model = get_multimodel(m)
     criterion = {
         'dice': DiceLoss(),
         'crossentropy': CrossEntropyLoss(),
     }
-    optimizer = get_optimizer(o, model)
-    scheduler = get_scheduler(s, optimizer)
-    callbacks = [ConfusionMatrixCallback(class_names=get_class_names())]
-    return model, optimizer, scheduler, criterion
+    return get_dict_components(o, s,
+        get_multimodel(m), criterion, [ConfusionMatrixCallback(class_names=get_class_names())])
