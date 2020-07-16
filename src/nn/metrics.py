@@ -1,13 +1,18 @@
 import torch
+import numpy as np
 
-def iou(outputs, labels):
-    smooth = 1e-6
-    outputs = outputs.squeeze(1)
-    
-    intersection = (outputs & labels).float().sum((1, 2))
-    union = (outputs | labels).float().sum((1, 2))
+smooth = 1e-7
+prepare = lambda t: t.detach().cpu().squeeze(1)
+
+def threshold(tensor, t=0.4):
+    tensor[tensor >= t] = 1
+    tensor[tensor < t] = 0
+    return tensor.long()
+
+def iou(outputs, targets):
+    outputs, targets = prepare(outputs), prepare(targets)
+    outputs, targets = threshold(outputs), threshold(targets)
+    intersection = (outputs & targets).float().sum()
+    union = (outputs | targets).float().sum()
     iou = (intersection + smooth) / (union + smooth)
-    
-    thresholded = torch.clamp(20 * (iou - 0.5), 0, 10).ceil() / 10
-    
-    return thresholded
+    return iou
