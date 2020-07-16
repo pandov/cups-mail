@@ -43,7 +43,7 @@ if __name__ == '__main__':
     dataset = Test()
     transform = get_test_transform()
 
-    multimodel = get_multimodel_components('resnet50')[:1]
+    multimodel = get_multimodel_components('resnet50')['model']
     multimodel_weights = torch.load(multimodel_best)
     multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     multimodel.eval()
@@ -57,12 +57,15 @@ if __name__ == '__main__':
     # classification.load_state_dict(classification_weights['model_state_dict'])
     # classification.eval()
 
+    unpack = lambda t: t.detach().squeeze(0).permute(1, 2, 0).numpy()
+
     for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
         image = transform(image).unsqueeze(0)
 
-        predict_segmentation, predict_classification = multimodel(image).detach().squeeze(0).permute(1, 2, 0).numpy()
+        predict = multimodel(image)
+        predict_segmentation, predict_classification = map(unpack, predict)
 
         # predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
         predict_segmentation -= predict_segmentation.min()
