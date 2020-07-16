@@ -32,7 +32,7 @@ def get_test_transform():
     return transforms.Compose([
         transforms.Grayscale(3),
         transforms.ToTensor(),
-        # transforms.Lambda(negative_normalize),
+        transforms.Lambda(negative_normalize),
         transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
@@ -46,8 +46,8 @@ if __name__ == '__main__':
     device = get_device()
 
     multimodel = get_multimodel_components('resnet50')['model'].to(device)
-    multimodel_weights = torch.load(multimodel_best)
-    multimodel.load_state_dict(multimodel_weights['model_state_dict'])
+    # multimodel_weights = torch.load(multimodel_best)
+    # multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     multimodel.eval()
 
     # segmentation = get_segmentation_components(1)[:1]
