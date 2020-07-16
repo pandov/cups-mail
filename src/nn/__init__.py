@@ -2,22 +2,14 @@
 import torch
 torch.cuda.empty_cache()
 import segmentation_models_pytorch as segmentation
+from catalyst.dl import Runner, SupervisedRunner
+from catalyst.utils import metrics, set_global_seed, prepare_cudnn
+from .names import get_class_names
 from .dataset import BACTERIA
-from catalyst.dl import SupervisedRunner, ConfusionMatrixCallback, IouCallback
-from catalyst.utils import set_global_seed, prepare_cudnn
+from .callbacks import ConfusionMatrixCallback
 
 prepare_cudnn(deterministic=True)
 set_global_seed(7)
-
-def get_class_names():
-    return [
-        'c_kefir',
-        'ent_cloacae',
-        'klebsiella_pneumoniae',
-        'moraxella_catarrhalis',
-        'staphylococcus_aureus',
-        'staphylococcus_epidermidis',
-    ]
 
 def get_classification_model(name, num_classes=6):
     from torchvision import models
@@ -45,6 +37,10 @@ def get_segmentation_model(name):
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
     elif name == 'resnet34':
         return segmentation.Unet('resnet34', activation='sigmoid')
+
+def get_multimodel(name):
+    if name == 'resnet34':
+        return segmentation.Unet('resnet34', activation='sigmoid', classes=6)
 
 def get_optimizer(name, model):
     if name == 'adam':
@@ -81,3 +77,15 @@ def get_classification_components(m, o=None, s=None):
     scheduler = get_scheduler(s, optimizer)
     callbacks = [ConfusionMatrixCallback(class_names=get_class_names())]
     return model, optimizer, scheduler, criterion, callbacks
+
+def get_multimodel_components(m, o=None, s=None):
+    from torch.nn import CrossEntropyLoss
+    from .loss import DiceLoss
+    model = get_multimodel(m)
+    criterion = {
+        'dice': DiceLoss(),
+        'crossentropy': CrossEntropyLoss(),
+    }
+    optimizer = get_optimizer(o, model)
+    scheduler = get_scheduler(s, optimizer)
+    return model, optimizer, scheduler, criterion
