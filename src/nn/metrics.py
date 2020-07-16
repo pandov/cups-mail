@@ -2,7 +2,7 @@ import torch
 import numpy as np
 
 smooth = 1e-7
-prepare = lambda t: t.detach().squeeze(1)
+prepare = lambda t: t.detach().cpu().squeeze(1)
 
 def threshold(tensor, t=0.5):
     tensor.requires_grad = False

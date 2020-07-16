@@ -8,6 +8,7 @@ from src.dataset import Test
 from PIL import Image
 from torchvision import transforms
 from tqdm import tqdm
+from catalyst.utils import get_device
 
 sample_submission = './dataset/external/sample_submission.csv'
 date = '16-07-20'
@@ -42,8 +43,9 @@ if __name__ == '__main__':
 
     dataset = Test()
     transform = get_test_transform()
+    device = get_device()
 
-    multimodel = get_multimodel_components('resnet50')['model']
+    multimodel = get_multimodel_components('resnet50')['model'].to(device)
     multimodel_weights = torch.load(multimodel_best)
     multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     multimodel.eval()
@@ -62,14 +64,13 @@ if __name__ == '__main__':
     for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
-        image = transform(image).unsqueeze(0)
+        image = transform(image).unsqueeze(0).to(device)
 
         with torch.no_grad():
             predict = multimodel(image)
-            predict_segmentation, predict_classification = map(unpack, predict)
-            predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
-        
-        torch.cuda.empty_cache()
+
+        predict_segmentation, predict_classification = map(unpack, predict)
+        predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
         # predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
         predict_segmentation -= predict_segmentation.min()
@@ -89,3 +90,5 @@ if __name__ == '__main__':
 
         df = df.append(addata(columns, filepath.stem, predict_label, predict_base64), ignore_index=True)
         df.to_csv(output_submission, index=False)
+
+        torch.cuda.empty_cache()

@@ -23,13 +23,13 @@ def get_stages_transform():
             transforms.RandomGaussianBlur(1),
             transforms.Grayscale(),
             transforms.ToTensor(),
-            transforms.Negative(),
+            # transforms.Negative(),
             transforms.Normalize(),
         ]),
         'valid': transforms.Compose([
             transforms.Grayscale(),
             transforms.ToTensor(),
-            transforms.Negative(),
+            # transforms.Negative(),
             transforms.Normalize(),
         ]),
     }
