@@ -3,6 +3,7 @@ colab.sh
 __pycache__/
 .config/
 .pytest_cache/
+.ipynb_checkpoints/
 dataset/processed/
 sample_data/
 logs/*.zip
