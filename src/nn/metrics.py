@@ -4,7 +4,7 @@ import numpy as np
 smooth = 1e-7
 prepare = lambda t: t.detach().squeeze(1)
 
-def threshold(tensor, t=0.4):
+def threshold(tensor, t=0.5):
     tensor.requires_grad = False
     tensor[tensor >= t] = 1
     tensor[tensor < t] = 0

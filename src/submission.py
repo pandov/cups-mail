@@ -57,21 +57,25 @@ if __name__ == '__main__':
     # classification.load_state_dict(classification_weights['model_state_dict'])
     # classification.eval()
 
-    unpack = lambda t: t.detach().squeeze(0).permute(1, 2, 0).numpy()
+    unpack = lambda t: t.detach().cpu().squeeze(0)
 
     for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
         image = transform(image).unsqueeze(0)
 
-        predict = multimodel(image)
-        predict_segmentation, predict_classification = map(unpack, predict)
+        with torch.no_grad():
+            predict = multimodel(image)
+            predict_segmentation, predict_classification = map(unpack, predict)
+            predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
+        
+        torch.cuda.empty_cache()
 
         # predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
         predict_segmentation -= predict_segmentation.min()
         predict_segmentation /= predict_segmentation.max()
-        predict_segmentation[predict_segmentation < 0.4] = 0
-        predict_segmentation[predict_segmentation >= 0.4] = 1
+        predict_segmentation[predict_segmentation < 0.5] = 0
+        predict_segmentation[predict_segmentation >= 0.5] = 1
         predict_segmentation *= 255
         predict_mask = predict_segmentation.astype(np.uint8)
         cv2.imwrite(savepath, predict_mask)

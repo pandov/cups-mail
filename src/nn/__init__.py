@@ -8,7 +8,7 @@ from .dataset import BACTERIA
 from .metrics import iou as iou_metric
 
 prepare_cudnn(deterministic=True)
-set_global_seed(7)
+set_global_seed(3)
 
 def get_class_names():
     return [
