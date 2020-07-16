@@ -12,26 +12,13 @@ def loader(image_path):
     mask = default_loader(mask_path)
     return image, mask
 
-def set_rotation_by_apply_mask(apply_mask):
-    if apply_mask:
-        return transforms.RandomRotation(180)
-    else:
-        return transforms.RandomRotation90()
-    
-def set_perspective_by_apply_mask(apply_mask):
-    if apply_mask:
-        return transforms.RandomPerspective(distortion_scale=0.1)
-    else:
-        return transforms.Lambda(lambda x: x)
-
-def get_stages_transform(apply_mask):
+def get_stages_transform():
     return {
         'train': transforms.Compose([
             transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.2, hue=0.2),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
-            set_rotation_by_apply_mask(apply_mask),
-            set_perspective_by_apply_mask(apply_mask),
+            transforms.RandomRotation90(),
             transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
             transforms.RandomGaussianBlur(1),
             transforms.Grayscale(),
@@ -61,7 +48,7 @@ class BACTERIA(ImageFolder):
     def __init__(self, keys, apply_mask=False, **kwargs):
         kwargs['root'] = './dataset/processed/samples'
         kwargs['loader'] = loader
-        kwargs['transform'] = get_stages_transform(apply_mask)
+        kwargs['transform'] = get_stages_transform()
         super().__init__(**kwargs)
         self.keys = keys
         self.apply_mask = apply_mask
