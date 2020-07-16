@@ -3,9 +3,9 @@ import torch
 torch.cuda.empty_cache()
 import segmentation_models_pytorch as segmentation
 from catalyst.dl import Runner, SupervisedRunner
-from catalyst.utils import metrics, set_global_seed, prepare_cudnn
-from .names import get_class_names
+from catalyst.utils import set_global_seed, prepare_cudnn
 from .dataset import BACTERIA
+from .metrics import iou as iou_metric
 
 prepare_cudnn(deterministic=True)
 set_global_seed(7)
@@ -33,7 +33,6 @@ def get_classification_model(name, num_classes=6):
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif name == 'vgg16':
         model = models.vgg16(pretrained=True)
-        # model.features.requires_grad_(False)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif name == 'alexnet':
         model = models.alexnet(pretrained=True)
@@ -48,8 +47,10 @@ def get_segmentation_model(name):
         return segmentation.Unet('resnet34', activation='sigmoid')
 
 def get_multimodel(name):
-    if name == 'resnet34':
-        return segmentation.Unet('resnet34', activation='sigmoid', classes=6)
+    aux_params=dict(
+        classes=6,
+    )
+    return segmentation.Unet(name, activation='sigmoid', aux_params=aux_params)
 
 def get_optimizer(name, model):
     if name == 'adam':
