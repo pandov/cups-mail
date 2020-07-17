@@ -8,3 +8,4 @@ dataset/processed/
 sample_data/
 logs/*.zip
 logs/*/*/checkpoints/*_full.pth
+logs/*/*/_base_log/*
