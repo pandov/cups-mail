@@ -29,15 +29,15 @@ detach = lambda t: t.detach().cpu()
 threshold = lambda t: (t > 0.5).long()
 to_mask = lambda t: threshold(detach(t))
 
-def dice_and_iou(outputs, targets):
-    outputs, targets = map(to_mask, (outputs, targets))
-    intersection = (outputs & targets).float().sum()
-    union = (outputs | targets).float().sum()
-    dice = (2 * intersection + eps) / (union + intersection + eps)
-    iou = (intersection + eps) / (union + eps)
-    return dice, iou
+# def dice_and_iou(outputs, targets):
+#     outputs, targets = map(to_mask, (outputs, targets))
+#     intersection = (outputs & targets).float().sum()
+#     union = (outputs | targets).float().sum()
+#     dice = (2 * intersection + eps) / (union + intersection + eps)
+#     iou = (intersection + eps) / (union + eps)
+#     return dice, iou
 
-def score_classification(predicitons, labels):
+def score_clf(predicitons, labels):
     predicitons, labels = map(detach, (predicitons, labels))
     probabilities = torch.softmax(predicitons, dim=0)
     confusion_matrix = calculate_confusion_matrix_from_tensors(probabilities, labels)
@@ -46,7 +46,7 @@ def score_classification(predicitons, labels):
     precision = tp / (tp + fp + eps)
     return precision
 
-def score_segmentation(outputs, targets):
+def score_aux(outputs, targets):
     outputs, targets = map(lambda t: to_mask(t).numpy(), (outputs, targets))
     intersection = np.count_nonzero(np.logical_and(targets, outputs))
     union = np.count_nonzero(np.logical_or(targets, outputs))
@@ -54,8 +54,8 @@ def score_segmentation(outputs, targets):
     mean = np.mean(iou)
     return mean
 
-def score_global(outputs, targets, predicitons, labels):
-    return score_segmentation(outputs, targets) + score_classification(predicitons, labels)
+# def score_global(outputs, targets, predicitons, labels):
+#     return score_aux(outputs, targets) + score_clf(predicitons, labels)
 
 # def iou(outputs, targets):
 #     outputs, targets = map(threshold, (outputs, targets))
