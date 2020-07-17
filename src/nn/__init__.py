@@ -5,7 +5,7 @@ import segmentation_models_pytorch as segmentation
 from catalyst.dl import Runner, SupervisedRunner
 from catalyst.utils import set_global_seed, prepare_cudnn
 from .dataset import BACTERIA
-from .metrics import dice_and_iou
+from .metrics import dice_and_iou, score
 
 prepare_cudnn(deterministic=True)
 set_global_seed(3)
