@@ -28,11 +28,6 @@ class IoULoss(torch.nn.Module):
 detach = lambda t: t.detach().cpu()
 threshold = lambda t: (t > 0.5).long()
 to_mask = lambda t: threshold(detach(t))
-softmax = lambda t: torch.softmax(detach(t))
-
-# def to_class(t):
-#     probs = softmax(t)
-#     return (probs == probs.max()).long()
 
 def dice_and_iou(outputs, targets):
     outputs, targets = map(to_mask, (outputs, targets))
@@ -48,14 +43,13 @@ def score(outputs, targets, predicitons, labels):
     union = np.count_nonzero(np.logical_or(targets, outputs))
     mean = np.mean((intersection + eps) / (union + eps))
 
-    predicitons, labels = map(softmax, (predicitons, labels))
-    confusion_matrix = calculate_confusion_matrix_from_tensors(predicitons, labels)
-    tp = calculate_tp_fp_fn(confusion_matrix)['true_positives']
-    print(tp)
-
-    return mean
-    # predicitons, labels = map(lambda t: to_class(t).numpy(), (predicitons, labels))
-    # confusion_matrix = 
+    predicitons, labels = map(detach, (predicitons, labels))
+    probabilities = torch.softmax(predicitons, dim=0)
+    confusion_matrix = calculate_confusion_matrix_from_tensors(probabilities, labels)
+    p = calculate_tp_fp_fn(confusion_matrix)
+    tp, fp, fn = p['true_positives'], p['false_positives'], p['false_negatives']
+    precision = tp / (tp + fp)
+    return mean + precision
 
 # def iou(outputs, targets):
 #     outputs, targets = map(threshold, (outputs, targets))
