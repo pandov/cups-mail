@@ -98,8 +98,9 @@ def get_classification_components(m, o=None, s=None):
 def get_multimodel_components(m, o=None, s=None):
     from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
-    from .loss import DiceLoss
+    from .metrics import DiceLoss, IoULoss
     criterion = {
+        'iou': IoULoss(),
         'dice': DiceLoss(),
         'crossentropy': CrossEntropyLoss(),
     }
