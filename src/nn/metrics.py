@@ -43,7 +43,7 @@ def score_classification(predicitons, labels):
     confusion_matrix = calculate_confusion_matrix_from_tensors(probabilities, labels)
     p = calculate_tp_fp_fn(confusion_matrix)
     tp, fp, fn = p['true_positives'], p['false_positives'], p['false_negatives']
-    precision = tp / (tp + fp)
+    precision = np.mean(tp / (tp + fp))
     return precision
 
 def score_segmentation(outputs, targets):
