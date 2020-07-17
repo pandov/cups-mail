@@ -23,7 +23,7 @@ def addata(columns, *args):
     return dict(zip(columns, args))
 
 def negative_normalize(img):
-    img = 1 - img
+    # img = 1 - img
     img -= img.min()
     img /= img.max()
     return img
@@ -46,8 +46,8 @@ if __name__ == '__main__':
     device = get_device()
 
     multimodel = get_multimodel_components('resnet50')['model'].to(device)
-    # multimodel_weights = torch.load(multimodel_best)
-    # multimodel.load_state_dict(multimodel_weights['model_state_dict'])
+    multimodel_weights = torch.load(multimodel_best)
+    multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     multimodel.eval()
 
     # segmentation = get_segmentation_components(1)[:1]
@@ -75,10 +75,8 @@ if __name__ == '__main__':
         # predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
         predict_segmentation -= predict_segmentation.min()
         predict_segmentation /= predict_segmentation.max()
-        predict_segmentation[predict_segmentation < 0.5] = 0
-        predict_segmentation[predict_segmentation >= 0.5] = 1
-        predict_segmentation *= 255
-        predict_mask = predict_segmentation.astype(np.uint8)
+        predict_mask = (predict_segmentation > 0.5).astype(np.uint8)
+        predict_mask *= 255
         cv2.imwrite(savepath, predict_mask)
         with open(savepath, 'rb') as f:
             predict_base64 = str(base64.b64encode(f.read()), 'utf-8')

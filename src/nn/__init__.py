@@ -5,7 +5,7 @@ import segmentation_models_pytorch as segmentation
 from catalyst.dl import Runner, SupervisedRunner
 from catalyst.utils import set_global_seed, prepare_cudnn
 from .dataset import BACTERIA
-from .metrics import iou as iou_metric
+from .metrics import dice_and_iou
 
 prepare_cudnn(deterministic=True)
 set_global_seed(3)
@@ -50,7 +50,7 @@ def get_multimodel(name):
     aux_params=dict(
         classes=6,
     )
-    return segmentation.Unet(name, activation='sigmoid', aux_params=aux_params)
+    return segmentation.Unet(name, activation='sigmoid', in_channels=1, classes=1, aux_params=aux_params)
 
 def get_optimizer(name, model):
     if name == 'adam':
@@ -64,8 +64,8 @@ def get_optimizer(name, model):
 
 def get_scheduler(name, optimizer):
     if name == 'steplr':
-        # return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
-        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
+        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
+        # return torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
     elif name == 'reducelronplateau':
         return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=3, min_lr=1e-5, verbose=True)
     else:
@@ -85,7 +85,7 @@ def get_dict_components(o, s, model, criterion, callbacks):
 
 def get_segmentation_components(m, o=None, s=None):
     from catalyst.dl import IouCallback
-    from .loss import DiceLoss
+    from .metrics import DiceLoss
     return get_dict_components(o, s,
         get_segmentation_model(m), DiceLoss(), [IouCallback()])
 

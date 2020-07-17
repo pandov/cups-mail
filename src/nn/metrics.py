@@ -1,19 +1,41 @@
 import torch
-import numpy as np
 
 smooth = 1e-7
-prepare = lambda t: t.detach().cpu().squeeze(1)
 
-def threshold(tensor, t=0.5):
+class DiceLoss(torch.nn.Module):
+
+    def forward(self, y_pred, y_true):
+        assert y_pred.size() == y_true.size(), 'Size mismatch'
+        # y_pred = y_pred[:, 0].contiguous().view(-1)
+        # y_true = y_true[:, 0].contiguous().view(-1)
+        intersection = (y_pred * y_true).sum()
+        union = y_pred.sum() + y_true.sum()
+        dice = (2 * intersection + smooth) / (union + smooth)
+        return 1 - dice
+
+def threshold(tensor):
+    tensor = tensor.detach().cpu()#.squeeze(1)
     tensor.requires_grad = False
-    tensor[tensor >= t] = 1
-    tensor[tensor < t] = 0
-    return tensor.long()
+    return (tensor > 0.5).long()
 
-def iou(outputs, targets):
-    outputs, targets = prepare(outputs), prepare(targets)
-    outputs, targets = threshold(outputs), threshold(targets)
+def dice_and_iou(outputs, targets):
+    outputs, targets = map(threshold, (outputs, targets))
     intersection = (outputs & targets).float().sum()
     union = (outputs | targets).float().sum()
-    iou = (intersection + smooth) / (union + smooth)
-    return iou
+    dice = (2 * intersection + smooth) / (union + intersection + smooth)
+    iou = (intersection + smooth) / (union - intersection + smooth)
+    return dice, iou
+
+# def iou(outputs, targets):
+#     outputs, targets = map(threshold, (outputs, targets))
+#     intersection = (outputs & targets).float().sum()
+#     union = (outputs | targets).float().sum()
+#     iou = (intersection + smooth) / (union - intersection + smooth)
+#     return iou
+
+# def dice(outputs, targets):
+#     outputs, targets = map(threshold, (outputs, targets))
+#     intersection = (outputs & targets).float().sum()
+#     union = (outputs | targets).float().sum()
+#     dice = (2 * intersection + smooth) / (union + intersection + smooth)
+#     return dice
