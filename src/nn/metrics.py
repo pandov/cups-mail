@@ -21,8 +21,8 @@ class IoULoss(torch.nn.Module):
         # y_true = y_true[:, 0].contiguous().view(-1)
         intersection = (y_pred * y_true).sum()
         union = y_pred.sum() + y_true.sum()
-        dice = (intersection + smooth) / (union - intersection + smooth)
-        return 1 - dice
+        iou = (intersection + smooth) / (union - intersection + smooth)
+        return 1 - iou
 
 def threshold(tensor):
     tensor = tensor.detach().cpu()#.squeeze(1)
