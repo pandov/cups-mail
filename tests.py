@@ -31,7 +31,7 @@ def test_dataset():
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         return image
 
-    dataset = BACTERIA(keys=['name', 'image', 'mask', 'label'], apply_mask=True)
+    dataset = BACTERIA(keys=['name', 'image', 'mask', 'label'], apply_mask=False)
     datasets = next(dataset.crossval(2))
     size = lambda x: 'x'.join(map(str, x.shape))
     for i, (name, image, mask, label) in enumerate(datasets['train']):

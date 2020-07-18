@@ -40,17 +40,24 @@ def get_classification_model(name, num_classes=6):
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     return model
 
-def get_segmentation_model(name):
-    if name == 'unet':
+def get_segmentation_model(name, encoder='resnet34'):
+    if name == 'brain':
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
-    elif name == 'resnet34':
-        return segmentation.Unet('resnet34', activation='sigmoid')
+    elif name == 'unet':
+        return segmentation.Unet(encoder, activation='sigmoid', in_channels=1)
+    elif name == 'fpn':
+        return segmentation.FPN(encoder, activation='sigmoid', in_channels=1)
 
-def get_multimodel(name):
-    aux_params=dict(
-        classes=6,
-    )
-    return segmentation.Unet(name, activation='sigmoid', in_channels=1, classes=1, aux_params=aux_params)
+def get_multimodel(name, encoder):
+    kwargs = dict(activation='sigmoid', in_channels=1, classes=1, aux_params=dict(classes=6))
+    if name == 'unet':
+        segmentation.Unet(encoder, **kwargs)
+    elif name == 'fpn':
+        segmentation.FPN(encoder, **kwargs)
+    elif name == 'linknet':
+        segmentation.Linknet(encoder, **kwargs)
+    elif name == 'pspnet':
+        segmentation.PSPNet(encoder, **kwargs)
 
 def get_optimizer(name, model):
     if name == 'adam':
@@ -95,7 +102,7 @@ def get_classification_components(m, o=None, s=None):
     return get_dict_components(o, s,
         get_classification_model(m), CrossEntropyLoss(), [ConfusionMatrixCallback(class_names=get_class_names())])
 
-def get_multimodel_components(m, o=None, s=None):
+def get_multimodel_components(m, e, o=None, s=None):
     from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
     from .metrics import DiceLoss, IoULoss
@@ -105,4 +112,4 @@ def get_multimodel_components(m, o=None, s=None):
         'crossentropy': CrossEntropyLoss(),
     }
     return get_dict_components(o, s,
-        get_multimodel(m), criterion, [ConfusionMatrixCallback(class_names=get_class_names())])
+        get_multimodel(m, e), criterion, [ConfusionMatrixCallback(class_names=get_class_names())])
