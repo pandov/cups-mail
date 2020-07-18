@@ -51,13 +51,13 @@ def get_segmentation_model(name, encoder='resnet34'):
 def get_multimodel(name, encoder):
     kwargs = dict(activation='sigmoid', in_channels=1, classes=1, aux_params=dict(classes=6))
     if name == 'unet':
-        segmentation.Unet(encoder, **kwargs)
+        return segmentation.Unet(encoder, **kwargs)
     elif name == 'fpn':
-        segmentation.FPN(encoder, **kwargs)
+        return segmentation.FPN(encoder, **kwargs)
     elif name == 'linknet':
-        segmentation.Linknet(encoder, **kwargs)
+        return segmentation.Linknet(encoder, **kwargs)
     elif name == 'pspnet':
-        segmentation.PSPNet(encoder, **kwargs)
+        return segmentation.PSPNet(encoder, **kwargs)
 
 def get_optimizer(name, model):
     if name == 'adam':
@@ -79,7 +79,6 @@ def get_scheduler(name, optimizer):
         return None
 
 def get_dict_components(o, s, model, criterion, callbacks):
-    model = model.train()
     optimizer = get_optimizer(o, model)
     scheduler = get_scheduler(s, optimizer)
     return {
