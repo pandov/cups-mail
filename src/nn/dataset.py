@@ -55,5 +55,5 @@ class BACTERIA(ImageFolder):
         items = {'name': name, 'image': image, 'mask': mask, 'label': label}
         return [items[key] for key in self.keys]
 
-    def loader(self, **kwargs):
+    def data_loader(self, **kwargs):
         return DataLoader(self, **kwargs)

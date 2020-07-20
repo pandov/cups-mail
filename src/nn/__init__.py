@@ -82,8 +82,8 @@ def get_loaders(keys, batch_size):
     train_dataset = BACTERIA('train', keys)
     valid_dataset = BACTERIA('valid', keys)
     return {
-        'train': train_dataset.loader(batch_size=batch_size, shuffle=True, drop_last=True),
-        'valid': valid_dataset.loader(),
+        'train': train_dataset.data_loader(batch_size=batch_size, shuffle=True, drop_last=True),
+        'valid': valid_dataset.data_loader(),
     }
 
 def get_dict_components(o, s, model, criterion, callbacks):
