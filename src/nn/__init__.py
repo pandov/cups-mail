@@ -72,7 +72,7 @@ def get_optimizer(name, model):
 def get_scheduler(name, optimizer):
     if name == 'steplr':
         # return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
-        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=30, gamma=0.1)
+        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=40, gamma=0.1)
     elif name == 'reducelronplateau':
         return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=3, min_lr=1e-5, verbose=True)
     else:
