@@ -101,7 +101,7 @@ def get_segmentation_components(m, e, o=None, s=None):
     from catalyst.dl import IouCallback
     from .metrics import DiceLoss
     return get_dict_components(o, s,
-        get_segmentation_model(m, e), DiceLoss(), [IouCallback()])
+        get_segmentation_model(m, e), DiceLoss(), callbacks=None)
 
 def get_classification_components(m, o=None, s=None):
     from catalyst.dl import ConfusionMatrixCallback
