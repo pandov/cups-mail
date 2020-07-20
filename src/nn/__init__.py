@@ -78,6 +78,14 @@ def get_scheduler(name, optimizer):
     else:
         return None
 
+def get_loaders(keys, batch_size):
+    train_dataset = BACTERIA('train', keys)
+    valid_dataset = BACTERIA('valid', keys)
+    return {
+        'train': train_dataset.loader(batch_size=batch_size, shuffle=True, drop_last=True),
+        'valid': valid_dataset.loader(),
+    }
+
 def get_dict_components(o, s, model, criterion, callbacks):
     optimizer = get_optimizer(o, model)
     scheduler = get_scheduler(s, optimizer)
