@@ -22,6 +22,7 @@ def get_class_names():
 
 def get_classification_model(name, num_classes=6):
     from torchvision import models
+    name = name.lower()
     if name == 'resnet50':
         model = models.resnet50(pretrained=True)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
@@ -45,23 +46,35 @@ def get_classification_model(name, num_classes=6):
     return model
 
 def get_segmentation_model(name, encoder='resnet34'):
+    name = name.lower()
     if name == 'brain':
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
-    elif name == 'unet':
-        return segmentation.Unet(encoder, activation='sigmoid', in_channels=1)
-    elif name == 'fpn':
-        return segmentation.FPN(encoder, activation='sigmoid', in_channels=1)
+    else:
+        kwargs = dict(encoder=encoder, activation='sigmoid', in_channels=1)
+        if name == 'unet':
+            return segmentation.Unet(**kwargs)
+        elif name == 'fpn':
+            return segmentation.FPN(**kwargs)
+        elif name == 'pan':
+            return segmentation.PAN(**kwargs)
+        elif name == 'linknet':
+            return segmentation.Linknet(**kwargs)
+        elif name == 'pspnet':
+            return segmentation.PSPNet(**kwargs)
+        elif name == 'deeplabv3':
+            return segmentation.DeepLabV3(**kwargs)
 
 def get_multimodel(name, encoder):
-    kwargs = dict(activation='sigmoid', in_channels=1, classes=1, aux_params=dict(classes=6))
+    name = name.lower()
+    kwargs = dict(encoder=encoder, activation='sigmoid', in_channels=1, classes=1, aux_params=dict(classes=6))
     if name == 'unet':
-        return segmentation.Unet(encoder, **kwargs)
+        return segmentation.Unet(**kwargs)
     elif name == 'fpn':
-        return segmentation.FPN(encoder, **kwargs)
+        return segmentation.FPN(**kwargs)
     elif name == 'linknet':
-        return segmentation.Linknet(encoder, **kwargs)
+        return segmentation.Linknet(**kwargs)
     elif name == 'pspnet':
-        return segmentation.PSPNet(encoder, **kwargs)
+        return segmentation.PSPNet(**kwargs)
 
 def get_optimizer(name, model):
     if name == 'adam':
