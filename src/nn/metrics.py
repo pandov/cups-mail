@@ -7,8 +7,6 @@ class DiceLoss(torch.nn.Module):
 
     def forward(self, y_pred, y_true):
         assert y_pred.size() == y_true.size(), 'Size mismatch'
-        # y_pred = y_pred[:, 0].contiguous().view(-1)
-        # y_true = y_true[:, 0].contiguous().view(-1)
         intersection = (y_pred * y_true).sum()
         union = y_pred.sum() + y_true.sum()
         dice = (2 * intersection + eps) / (union + eps)
@@ -18,24 +16,14 @@ class IoULoss(torch.nn.Module):
 
     def forward(self, y_pred, y_true):
         assert y_pred.size() == y_true.size(), 'Size mismatch'
-        # y_pred = y_pred[:, 0].contiguous().view(-1)
-        # y_true = y_true[:, 0].contiguous().view(-1)
         intersection = (y_pred * y_true).sum()
         union = y_pred.sum() + y_true.sum()
         iou = (intersection + eps) / (union - intersection + eps)
         return 1 - iou
 
 detach = lambda t: t.detach().cpu()
-threshold = lambda t: (t > 0.5).long()
-to_mask = lambda t: threshold(detach(t))
-
-# def dice_and_iou(outputs, targets):
-#     outputs, targets = map(to_mask, (outputs, targets))
-#     intersection = (outputs & targets).float().sum()
-#     union = (outputs | targets).float().sum()
-#     dice = (2 * intersection + eps) / (union + intersection + eps)
-#     iou = (intersection + eps) / (union + eps)
-#     return dice, iou
+threshold = lambda t, k: (t > k).long()
+to_mask = lambda t, k: threshold(detach(t), k)
 
 def score_clf(predicitons, labels):
     predicitons, labels = map(detach, (predicitons, labels))
@@ -43,14 +31,14 @@ def score_clf(predicitons, labels):
     confusion_matrix = calculate_confusion_matrix_from_tensors(probabilities, labels)
     p = calculate_tp_fp_fn(confusion_matrix)
     tp, fp, fn = p['true_positives'], p['false_positives'], p['false_negatives']
-    precision = tp / (tp + fp + eps)
+    precision = (tp + eps) / (tp + fp + eps)
     return precision
 
-def score_aux(outputs, targets):
-    outputs, targets = map(lambda t: to_mask(t).numpy(), (outputs, targets))
+def score_aux(outputs, targets, k):
+    outputs, targets = map(lambda t: to_mask(t, k).numpy(), (outputs, targets))
     intersection = np.count_nonzero(np.logical_and(targets, outputs))
     union = np.count_nonzero(np.logical_or(targets, outputs))
-    iou = intersection / (union + eps)
+    iou = (intersection + eps) / (union + eps)
     # mean = np.mean(iou)
     return iou
 
