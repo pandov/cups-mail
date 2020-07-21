@@ -27,6 +27,7 @@ def get_classification_model(name, num_classes=6):
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     elif name == 'resnet101':
         model = models.resnet101(pretrained=True)
+        model.conv1 = torch.nn.Conv2d(1, model.conv1.out_channels, model.conv1.kernel_size, model.conv1.stride, model.conv1.padding)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     elif name == 'vgg1':
         model = models.vgg11(pretrained=True)
