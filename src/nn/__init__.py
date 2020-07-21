@@ -45,12 +45,12 @@ def get_classification_model(name, num_classes=6):
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     return model
 
-def get_segmentation_model(name, encoder='resnet34'):
+def get_segmentation_model(name, encoder_name='resnet34'):
     name = name.lower()
     if name == 'brain':
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
     else:
-        kwargs = dict(encoder=encoder, activation='sigmoid', in_channels=1)
+        kwargs = dict(encoder_name=encoder_name, activation='sigmoid', in_channels=1)
         if name == 'unet':
             return segmentation.Unet(**kwargs)
         elif name == 'fpn':
