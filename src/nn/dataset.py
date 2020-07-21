@@ -24,7 +24,7 @@ def negative(state):
     else:
         return transforms.Lambda(lambda _: _)
 
-def get_stages_transform(is_resized=False, is_negative=False):
+def get_stages_transform(is_resized, is_negative):
     return {
         'train': transforms.Compose([
             transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.2, hue=0.2),

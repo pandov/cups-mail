@@ -49,6 +49,7 @@ def get_classification_model(name, num_classes=6):
         from efficientnet_pytorch import EfficientNet
         model = EfficientNet.from_pretrained(name)
         model._change_in_channels(1)
+        model._fc = torch.nn.Linear(model._fc.in_features, num_classes)
     return model
 
 def get_segmentation_model(name, encoder_name='resnet34'):

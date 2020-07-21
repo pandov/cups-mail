@@ -11,13 +11,15 @@ from tqdm import tqdm
 from catalyst.utils import get_device
 
 sample_submission = './dataset/external/sample_submission.csv'
-date = '15-07-20'
+date = '21-07-20'
 num_experiment = 0
 predicted_masks = f'.tmp/{date}/tests/'
 output_submission = f'.tmp/{date}/submission.csv'
-segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
-classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
-multimodel_best = f'.tmp/{date}/multimodel/{num_experiment}/checkpoints/best.pth'
+# segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
+# classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
+segmentation_best = f'.tmp/{date}/segmentation/unet_resnet101/checkpoints/best.pth'
+classification_best = f'.tmp/{date}/classification/resnet101/checkpoints/best.pth'
+# multimodel_best = f'.tmp/{date}/multimodel/{num_experiment}/checkpoints/best.pth'
 
 def addata(columns, *args):
     return dict(zip(columns, args))
@@ -30,10 +32,10 @@ def negative_normalize(img):
 
 def get_test_transform():
     return transforms.Compose([
-        transforms.Grayscale(3),
+        transforms.Grayscale(1),
         transforms.ToTensor(),
         transforms.Lambda(negative_normalize),
-        transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+        # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
 if __name__ == '__main__':
@@ -50,16 +52,17 @@ if __name__ == '__main__':
     # multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     # multimodel.eval()
 
-    # segmentation = get_segmentation_components(1)[:1]
-    # segmentation_weights = torch.load(segmentation_best)
-    # segmentation.load_state_dict(segmentation_weights['model_state_dict'])
-    # segmentation.eval()
-    classification = get_classification_components('resnet50')['model'].to(device)
+    segmentation = get_segmentation_components('unet', 'resnet101')['model'].to(device)
+    segmentation_weights = torch.load(segmentation_best)
+    segmentation.load_state_dict(segmentation_weights['model_state_dict'])
+    segmentation.eval()
+
+    classification = get_classification_components('resnet101')['model'].to(device)
     classification_weights = torch.load(classification_best)
     classification.load_state_dict(classification_weights['model_state_dict'])
     classification.eval()
 
-    predict_mask = np.zeros((512, 640, 3))
+    # predict_mask = np.zeros((512, 640, 3))
 
     unpack = lambda t: t.detach().cpu().squeeze(0)
 
@@ -68,18 +71,18 @@ if __name__ == '__main__':
 
         image = transform(image).unsqueeze(0).to(device)
 
-        # with torch.no_grad():
+        with torch.no_grad():
             # predict = multimodel(image)
-        predict_classification = classification(image).detach().squeeze(0)
-            # predict_segmentation = segmentation(image).detach().squeeze(0).permute(1, 2, 0).numpy()
+            predict_classification, predict_segmentation = map(unpack, (classification(image), segmentation(image)))
+            predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
         # predict_segmentation, predict_classification = map(unpack, predict)
         # predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
-        # predict_segmentation -= predict_segmentation.min()
-        # predict_segmentation /= predict_segmentation.max()
-        # predict_mask = (predict_segmentation > 0.5).astype(np.uint8)
-        # predict_mask *= 255
+        predict_segmentation -= predict_segmentation.min()
+        predict_segmentation /= predict_segmentation.max()
+        predict_mask = (predict_segmentation > 0.5).astype(np.uint8)
+        predict_mask *= 255
 
         cv2.imwrite(savepath, predict_mask)
         with open(savepath, 'rb') as f:
