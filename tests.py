@@ -31,10 +31,9 @@ def test_dataset():
         image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
         return image
 
-    dataset = BACTERIA(keys=['name', 'image', 'mask', 'label'], apply_mask=False)
-    datasets = next(dataset.crossval(2))
+    dataset = BACTERIA('train', keys=['name', 'image', 'mask', 'label'])
     size = lambda x: 'x'.join(map(str, x.shape))
-    for i, (name, image, mask, label) in enumerate(datasets['train']):
+    for i, (name, image, mask, label) in enumerate(dataset):
         # if i == 10: break
         image = _torch2cv(image, np.uint8)
         mask = _torch2cv(mask, np.uint8)

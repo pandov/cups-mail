@@ -49,7 +49,7 @@ if __name__ == '__main__':
     train = 0
     valid = 0
 
-    for key,   in counts.items():
+    for key, value  in counts.items():
         k = value // 4
         general += value
         train += (value - k)
