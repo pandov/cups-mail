@@ -97,9 +97,9 @@ def get_scheduler(name, optimizer):
     else:
         return None
 
-def get_loaders(keys, batch_size, is_resized):
-    train_dataset = BACTERIA('train', keys, is_resized)
-    valid_dataset = BACTERIA('valid', keys, is_resized)
+def get_loaders(batch_size, **kwargs):
+    train_dataset = BACTERIA('train', **kwargs)
+    valid_dataset = BACTERIA('valid', **kwargs)
     return {
         'train': train_dataset.data_loader(batch_size=batch_size, shuffle=True, drop_last=True),
         'valid': valid_dataset.data_loader(batch_size=min(batch_size, len(valid_dataset))),
