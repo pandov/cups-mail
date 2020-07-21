@@ -12,7 +12,13 @@ def loader(image_path):
     mask = default_loader(mask_path)
     return image, mask
 
-def get_stages_transform():
+def resized(state):
+    if state:
+        return transforms.Resize((100, 100))
+    else:
+        return transforms.Lambda(lambda _: _)
+
+def get_stages_transform(is_resized=False):
     return {
         'train': transforms.Compose([
             transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.2, hue=0.2),
@@ -20,6 +26,7 @@ def get_stages_transform():
             transforms.RandomVerticalFlip(),
             transforms.RandomRotation90(),
             transforms.RandomResizedCrop(size=(512, 640), scale=(0.8, 1.0), ratio=(0.9, 1.1)),
+            resized(is_resized),
             transforms.RandomGaussianBlur(1),
             transforms.Grayscale(),
             transforms.ToTensor(),
@@ -27,6 +34,7 @@ def get_stages_transform():
             transforms.Normalize(),
         ]),
         'valid': transforms.Compose([
+            resized(is_resized),
             transforms.Grayscale(),
             transforms.ToTensor(),
             transforms.Negative(),
@@ -36,10 +44,10 @@ def get_stages_transform():
 
 class BACTERIA(ImageFolder):
 
-    def __init__(self, stage, keys, apply_mask=False, **kwargs):
+    def __init__(self, stage, keys, is_resized=False, apply_mask=False, **kwargs):
         kwargs['root'] = f'./dataset/processed/{stage}/samples'
         kwargs['loader'] = loader
-        kwargs['transform'] = get_stages_transform().get(stage)
+        kwargs['transform'] = get_stages_transform(is_resized).get(stage)
         super().__init__(**kwargs)
         self.keys = keys
         self.apply_mask = apply_mask

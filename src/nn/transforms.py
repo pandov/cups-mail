@@ -10,6 +10,10 @@ class Compose(transforms.Compose):
             img, mask = t(img, mask)
         return img, mask
 
+class Lambda(transforms.Lambda):
+    def __call__(self, img, mask):
+        return self.lambd(img), self.lambd(mask)
+
 class RandomHorizontalFlip(transforms.RandomHorizontalFlip):
     def __call__(self, img, mask):
         if torch.rand(1) < self.p:
@@ -100,11 +104,11 @@ class ColorJitter(transforms.ColorJitter):
 #         mask = TF.crop(mask, i, j, h, w)
 #         return img, mask
 
-# class Resize(transforms.Resize):
-#     def __call__(self, img, mask):
-#         img = TF.resize(img, self.size, self.interpolation)
-#         mask = TF.resize(mask, self.size, self.interpolation)
-#         return img, mask
+class Resize(transforms.Resize):
+    def __call__(self, img, mask):
+        img = TF.resize(img, self.size, self.interpolation)
+        mask = TF.resize(mask, self.size, self.interpolation)
+        return img, mask
 
 class RandomGaussianBlur(object):
     def __init__(self, radius, p=0.5):

@@ -27,8 +27,8 @@ to_mask = lambda t, k: threshold(detach(t), k)
 
 def score_clf(predicitons, labels):
     predicitons, labels = map(detach, (predicitons, labels))
-    probabilities = torch.softmax(predicitons, dim=0)
-    confusion_matrix = calculate_confusion_matrix_from_tensors(probabilities, labels)
+    # probabilities = torch.softmax(predicitons, dim=0)
+    confusion_matrix = calculate_confusion_matrix_from_tensors(predicitons, labels)
     p = calculate_tp_fp_fn(confusion_matrix)
     tp, fp, fn = p['true_positives'], p['false_positives'], p['false_negatives']
     precision = (tp + eps) / (tp + fp + eps)
