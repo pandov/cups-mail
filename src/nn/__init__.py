@@ -3,10 +3,11 @@ import torch
 torch.cuda.empty_cache()
 import segmentation_models_pytorch as segmentation
 from catalyst.dl import Runner, SupervisedRunner
-from catalyst.utils import set_global_seed, prepare_cudnn
+from catalyst.utils import get_device, set_global_seed, prepare_cudnn
 from .dataset import BACTERIA
 from .metrics import score_aux, score_clf
 
+device = get_device()
 prepare_cudnn(deterministic=True)
 set_global_seed(3)
 
@@ -120,11 +121,16 @@ def get_segmentation_components(m, e, o=None, s=None):
     return get_dict_components(o, s,
         get_segmentation_model(m, e), DiceLoss(), callbacks=None)
 
-def get_classification_components(m, o=None, s=None):
+def get_classification_components(m, o=None, s=None, weightable=False):
     from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
+    weight = None
+    if weightable:
+        weight = torch.tensor([52., 69., 10., 29., 14., 18.], device=device)
+        weight /= weight.max()
+        weight = 2 - weight
     return get_dict_components(o, s,
-        get_classification_model(m), CrossEntropyLoss(), [ConfusionMatrixCallback(class_names=get_class_names())])
+        get_classification_model(m), CrossEntropyLoss(weight=weight), [ConfusionMatrixCallback(class_names=get_class_names())])
 
 def get_multimodel_components(m, e, o=None, s=None):
     from catalyst.dl import ConfusionMatrixCallback
