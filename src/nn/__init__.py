@@ -45,6 +45,10 @@ def get_classification_model(name, num_classes=6):
         model = models.alexnet(pretrained=True)
         model.features.requires_grad_(False)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
+    elif 'efficientnet' in name:
+        from efficientnet_pytorch import EfficientNet
+        model = EfficientNet.from_pretrained(name)
+        model._change_in_channels(1)
     return model
 
 def get_segmentation_model(name, encoder_name='resnet34'):
