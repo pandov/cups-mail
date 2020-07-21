@@ -25,6 +25,9 @@ def get_classification_model(name, num_classes=6):
     if name == 'resnet50':
         model = models.resnet50(pretrained=True)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
+    elif name == 'resnet101':
+        model = models.resnet101(pretrained=True)
+        model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
     elif name == 'vgg1':
         model = models.vgg11(pretrained=True)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
