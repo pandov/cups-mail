@@ -42,8 +42,7 @@ def get_classification_model(name, num_classes=6):
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif 'efficientnet' in name:
         from efficientnet_pytorch import EfficientNet
-        model = EfficientNet.from_pretrained(name)
-        model._change_in_channels(1)
+        model = EfficientNet.from_pretrained(name, in_channels=1, advprop=True)
         model._fc = torch.nn.Linear(model._fc.in_features, num_classes)
     return model
 
