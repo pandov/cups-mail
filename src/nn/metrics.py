@@ -34,7 +34,7 @@ def score_clf(predicitons, labels):
     precision = (tp + eps) / (tp + fp + eps)
     return precision
 
-def score_aux(outputs, targets, k):
+def score_aux(outputs, targets, k=0.5):
     outputs, targets = map(lambda t: to_mask(t, k).numpy(), (outputs, targets))
     intersection = np.count_nonzero(np.logical_and(targets, outputs))
     union = np.count_nonzero(np.logical_or(targets, outputs))

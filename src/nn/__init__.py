@@ -24,26 +24,20 @@ def get_class_names():
 def get_classification_model(name, num_classes=6):
     from torchvision import models
     name = name.lower()
-    if name == 'resnet50':
-        model = models.resnet50(pretrained=True)
+    if 'resnet' in name:
+        if '50' in name:
+            model = models.resnet50(pretrained=True)
+        elif '101' in name:
+            model = models.resnet101(pretrained=True)
         model.conv1 = torch.nn.Conv2d(1, model.conv1.out_channels, model.conv1.kernel_size, model.conv1.stride, model.conv1.padding)
         model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
-    elif name == 'resnet101':
-        model = models.resnet101(pretrained=True)
-        model.conv1 = torch.nn.Conv2d(1, model.conv1.out_channels, model.conv1.kernel_size, model.conv1.stride, model.conv1.padding)
-        model.fc = torch.nn.Linear(model.fc.in_features, num_classes)
-    elif name == 'vgg11':
-        model = models.vgg11(pretrained=True)
-        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
-    elif name == 'vgg13':
-        model = models.vgg13(pretrained=True)
-        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
-    elif name == 'vgg16':
-        model = models.vgg16(pretrained=True)
-        model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
-    elif name == 'alexnet':
-        model = models.alexnet(pretrained=True)
-        model.features.requires_grad_(False)
+    elif 'vgg' in name:
+        if '11' in name:
+            model = models.vgg11(pretrained=True)
+        elif '13' in name:
+            model = models.vgg13(pretrained=True)
+        elif '16' in name:
+            model = models.vgg16(pretrained=True)
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif 'efficientnet' in name:
         from efficientnet_pytorch import EfficientNet
@@ -55,7 +49,7 @@ def get_classification_model(name, num_classes=6):
 def get_segmentation_model(name, encoder_name='resnet34'):
     name = name.lower()
     if name == 'brain':
-        return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=3, out_channels=1, init_features=32, pretrained=True)
+        return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=1, out_channels=1, init_features=32, pretrained=True)
     else:
         kwargs = dict(encoder_name=encoder_name, activation='sigmoid', in_channels=1)
         if name == 'unet':
@@ -85,7 +79,7 @@ def get_multimodel(name, encoder):
 
 def get_optimizer(name, model):
     if name == 'adam':
-        return torch.optim.Adam(model.parameters(), lr=1e-3)
+        return torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
     elif name == 'sgd':
         return torch.optim.SGD(model.parameters(), lr=1e-3)
     elif name == 'rmsprop':
@@ -96,7 +90,7 @@ def get_optimizer(name, model):
 def get_scheduler(name, optimizer):
     if name == 'steplr':
         # return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
-        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
+        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=80, gamma=0.1)
     elif name == 'reducelronplateau':
         return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=3, min_lr=1e-5, verbose=True)
     else:

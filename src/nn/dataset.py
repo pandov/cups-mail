@@ -14,20 +14,14 @@ def loader(image_path):
 
 def resized(state):
     if state:
-        return transforms.Resize((100, 100))
+        return transforms.Resize((224, 224))
     else:
         return transforms.Lambda(lambda _: _)
 
-def negative(state):
-    if state:
-        return transforms.Negative()
-    else:
-        return transforms.Lambda(lambda _: _)
-
-def get_stages_transform(is_resized, is_negative):
+def get_stages_transform(is_resized):
     return {
         'train': transforms.Compose([
-            transforms.ColorJitter(brightness=0.1, contrast=0.1, saturation=0.2, hue=0.2),
+            transforms.ColorJitter(brightness=0.15, contrast=0.15, saturation=0.25, hue=0.25),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.RandomRotation90(),
@@ -36,14 +30,14 @@ def get_stages_transform(is_resized, is_negative):
             transforms.RandomGaussianBlur(1),
             transforms.Grayscale(),
             transforms.ToTensor(),
-            negative(is_negative),
+            transforms.Negative(),
             transforms.Normalize(),
         ]),
         'valid': transforms.Compose([
             resized(is_resized),
             transforms.Grayscale(),
             transforms.ToTensor(),
-            negative(is_negative),
+            transforms.Negative(),
             transforms.Normalize(),
         ]),
     }

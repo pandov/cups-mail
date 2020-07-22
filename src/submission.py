@@ -11,14 +11,14 @@ from tqdm import tqdm
 from catalyst.utils import get_device
 
 sample_submission = './dataset/external/sample_submission.csv'
-date = '21-07-20'
+date = '22-07-20'
 num_experiment = 0
 predicted_masks = f'.tmp/{date}/tests/'
 output_submission = f'.tmp/{date}/submission.csv'
 # segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
 # classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
-segmentation_best = f'.tmp/{date}/segmentation/unet_resnet101/checkpoints/best.pth'
-classification_best = f'.tmp/{date}/classification/resnet101/checkpoints/best.pth'
+segmentation_best = f'.tmp/{date}/segmentation/unet_efficientnet-b4/checkpoints/best.pth'
+classification_best = f'.tmp/{date}/classification/efficientnet-b4/checkpoints/best.pth'
 # multimodel_best = f'.tmp/{date}/multimodel/{num_experiment}/checkpoints/best.pth'
 
 def addata(columns, *args):
@@ -38,6 +38,15 @@ def get_test_transform():
         # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
+def get_test_transform_clf():
+    return transforms.Compose([
+        transforms.Resize((100, 100)),
+        transforms.Grayscale(1),
+        transforms.ToTensor(),
+        transforms.Lambda(negative_normalize),
+        # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
+    ])
+
 if __name__ == '__main__':
     sample = pd.read_csv(sample_submission)
     columns = sample.columns
@@ -45,6 +54,7 @@ if __name__ == '__main__':
 
     dataset = Test()
     transform = get_test_transform()
+    transform_clf = get_test_transform_clf()
     device = get_device()
 
     # multimodel = get_multimodel_components('resnet50')['model'].to(device)
@@ -52,12 +62,12 @@ if __name__ == '__main__':
     # multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     # multimodel.eval()
 
-    segmentation = get_segmentation_components('unet', 'resnet101')['model'].to(device)
+    segmentation = get_segmentation_components('unet', 'efficientnet-b4')['model'].to(device)
     segmentation_weights = torch.load(segmentation_best)
     segmentation.load_state_dict(segmentation_weights['model_state_dict'])
     segmentation.eval()
 
-    classification = get_classification_components('resnet101')['model'].to(device)
+    classification = get_classification_components('efficientnet-b4')['model'].to(device)
     classification_weights = torch.load(classification_best)
     classification.load_state_dict(classification_weights['model_state_dict'])
     classification.eval()
@@ -69,11 +79,12 @@ if __name__ == '__main__':
     for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
+        image_clf = transform_clf(image).unsqueeze(0).to(device)
         image = transform(image).unsqueeze(0).to(device)
 
         with torch.no_grad():
             # predict = multimodel(image)
-            predict_classification, predict_segmentation = map(unpack, (classification(image), segmentation(image)))
+            predict_classification, predict_segmentation = map(unpack, (classification(image_clf), segmentation(image)))
             predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
         # predict_segmentation, predict_classification = map(unpack, predict)
