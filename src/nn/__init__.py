@@ -2,6 +2,7 @@
 import torch
 torch.cuda.empty_cache()
 import segmentation_models_pytorch as segmentation
+from torch import set_grad_enabled
 from catalyst.dl import Runner, SupervisedRunner
 from catalyst.utils import get_device, set_global_seed, prepare_cudnn
 from .dataset import BACTERIA

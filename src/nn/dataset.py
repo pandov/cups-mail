@@ -44,10 +44,10 @@ def get_stages_transform(is_resized):
 
 class BACTERIA(ImageFolder):
 
-    def __init__(self, stage, keys, is_resized=False, is_negative=True, apply_mask=False, **kwargs):
+    def __init__(self, stage, keys, is_resized=False, apply_mask=False, **kwargs):
         kwargs['root'] = f'./dataset/processed/{stage}/samples'
         kwargs['loader'] = loader
-        kwargs['transform'] = get_stages_transform(is_resized, is_negative).get(stage)
+        kwargs['transform'] = get_stages_transform(is_resized).get(stage)
         super().__init__(**kwargs)
         self.keys = keys
         self.apply_mask = apply_mask
