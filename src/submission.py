@@ -17,8 +17,8 @@ predicted_masks = f'.tmp/{date}/tests/'
 output_submission = f'.tmp/{date}/submission.csv'
 # segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
 # classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
-segmentation_best = f'.tmp/{date}/segmentation/unet_efficientnet-b4/checkpoints/best.pth'
-classification_best = f'.tmp/{date}/classification/efficientnet-b4/checkpoints/best.pth'
+segmentation_best = f'.tmp/{date}/segmentation/unet_timm-efficientnet-b4/checkpoints/best.pth'
+classification_best = f'.tmp/{date}/classification/timm-efficientnet-b4/checkpoints/best.pth'
 # multimodel_best = f'.tmp/{date}/multimodel/{num_experiment}/checkpoints/best.pth'
 
 def addata(columns, *args):
@@ -40,7 +40,7 @@ def get_test_transform():
 
 def get_test_transform_clf():
     return transforms.Compose([
-        transforms.Resize((100, 100)),
+        transforms.Resize((224, 224)),
         transforms.Grayscale(1),
         transforms.ToTensor(),
         transforms.Lambda(negative_normalize),
@@ -62,7 +62,7 @@ if __name__ == '__main__':
     # multimodel.load_state_dict(multimodel_weights['model_state_dict'])
     # multimodel.eval()
 
-    segmentation = get_segmentation_components('unet', 'efficientnet-b4')['model'].to(device)
+    segmentation = get_segmentation_components('unet', 'timm-efficientnet-b4')['model'].to(device)
     segmentation_weights = torch.load(segmentation_best)
     segmentation.load_state_dict(segmentation_weights['model_state_dict'])
     segmentation.eval()

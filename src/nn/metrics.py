@@ -39,7 +39,6 @@ def score_aux(outputs, targets, k=0.5):
     intersection = np.count_nonzero(np.logical_and(targets, outputs))
     union = np.count_nonzero(np.logical_or(targets, outputs))
     iou = (intersection + eps) / (union + eps)
-    # mean = np.mean(iou)
     return iou
 
 # def score_global(outputs, targets, predicitons, labels):

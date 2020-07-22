@@ -42,10 +42,13 @@ def get_classification_model(name, num_classes=6):
         model.classifier[-1] = torch.nn.Linear(model.classifier[-1].in_features, num_classes)
     elif 'efficientnet' in name:
         from efficientnet_pytorch import EfficientNet
-        model = EfficientNet.from_pretrained(name, in_channels=1, num_classes=num_classes, advprop=True)
+        advprop = 'adv' in name
+        if advprop:
+            name = name[4:]
+        model = EfficientNet.from_pretrained(name, in_channels=1, num_classes=num_classes, advprop=advprop)
     return model
 
-def get_segmentation_model(name, encoder_name='resnet34'):
+def get_segmentation_model(name, encoder_name=None):
     name = name.lower()
     if name == 'brain':
         return torch.hub.load('mateuszbuda/brain-segmentation-pytorch', 'unet', in_channels=1, out_channels=1, init_features=32, pretrained=True)
@@ -78,7 +81,7 @@ def get_multimodel(name, encoder):
 
 def get_optimizer(name, model):
     if name == 'adam':
-        return torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
+        return torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-7)
     elif name == 'sgd':
         return torch.optim.SGD(model.parameters(), lr=1e-3)
     elif name == 'rmsprop':
@@ -89,7 +92,7 @@ def get_optimizer(name, model):
 def get_scheduler(name, optimizer):
     if name == 'steplr':
         # return torch.optim.lr_scheduler.StepLR(optimizer, step_size=60, gamma=0.1)
-        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=80, gamma=0.1)
+        return torch.optim.lr_scheduler.StepLR(optimizer, step_size=70, gamma=0.1)
     elif name == 'reducelronplateau':
         return torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, factor=0.1, patience=3, min_lr=1e-5, verbose=True)
     else:
@@ -115,8 +118,7 @@ def get_dict_components(o, s, model, criterion, callbacks):
     }
 
 def get_segmentation_components(m, e, o=None, s=None):
-    from catalyst.dl import IouCallback
-    from .metrics import DiceLoss
+    from .metrics import DiceLoss, IoULoss
     return get_dict_components(o, s,
         get_segmentation_model(m, e), DiceLoss(), callbacks=None)
 
@@ -125,7 +127,7 @@ def get_classification_components(m, o=None, s=None, weightable=False):
     from torch.nn import CrossEntropyLoss
     weight = None
     if weightable:
-        weight = torch.tensor([52., 69., 10., 29., 14., 18.], device=device)
+        weight = torch.tensor([52., 69., 10., 3+29, 14., 5+18.], device=device)
         weight /= weight.max()
         weight = 2 - weight
     return get_dict_components(o, s,

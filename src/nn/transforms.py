@@ -1,7 +1,9 @@
 import torch
 import torchvision.transforms.functional as TF
+import cv2
+import numpy as np
 from torchvision import transforms
-from PIL import ImageFilter
+from PIL import Image, ImageFilter
 
 class Compose(transforms.Compose):
     def __call__(self, img, mask):
@@ -51,14 +53,14 @@ class RandomRotation90(object):
         mask = TF.rotate(mask, angle, False, True)
         return img, mask
 
-class RandomPerspective(transforms.RandomPerspective):
-    def __call__(self, img, mask):
-        if torch.rand(1) < self.p:
-            width, height = img.size
-            startpoints, endpoints = self.get_params(width, height, self.distortion_scale)
-            img = TF.perspective(img, startpoints, endpoints, self.interpolation)
-            mask = TF.perspective(mask, startpoints, endpoints, self.interpolation)
-        return img, mask
+# class RandomPerspective(transforms.RandomPerspective):
+#     def __call__(self, img, mask):
+#         if torch.rand(1) < self.p:
+#             width, height = img.size
+#             startpoints, endpoints = self.get_params(width, height, self.distortion_scale)
+#             img = TF.perspective(img, startpoints, endpoints, self.interpolation)
+#             mask = TF.perspective(mask, startpoints, endpoints, self.interpolation)
+#         return img, mask
 
 class RandomResizedCrop(transforms.RandomResizedCrop):
     def __call__(self, img, mask):
@@ -128,10 +130,10 @@ class Grayscale(transforms.Grayscale):
         mask = TF.to_grayscale(mask)
         return img, mask
 
-class Negative(transforms.Grayscale):
-    def __call__(self, img, mask):
-        img = 1 - img
-        return img, mask
+# class Negative(transforms.Grayscale):
+#     def __call__(self, img, mask):
+#         img = 1 - img
+#         return img, mask
 
 class ToTensor(transforms.ToTensor):
     def __call__(self, img, mask):
@@ -139,23 +141,19 @@ class ToTensor(transforms.ToTensor):
         mask = TF.to_tensor(mask)
         return img, mask
 
-class Normalize(transforms.Normalize):
-    def __init__(self):
-        super().__init__((0.485, 0.456, 0.406), (0.229, 0.224, 0.225), inplace=False)
+class Normalize(object):
 
     def __call__(self, img, mask):
-        img -= img.min()
-        img /= img.max()
-        # img = TF.normalize(img, self.mean, self.std, self.inplace)
+        img_np = np.asarray(img)
 
-        # mean = img.mean()
-        # std = img.std()
-        # img = (img - mean) / std
+        dilated_img = cv2.dilate(img_np, np.ones((7, 7), np.uint8))
+        bg_img = cv2.medianBlur(dilated_img, 21)
+        diff_img = cv2.absdiff(img_np, bg_img)   
+        norm_img = cv2.normalize(diff_img, None, alpha=0, beta=255, norm_type=cv2.NORM_MINMAX, dtype=cv2.CV_8UC1)
 
-        # print(float(img.min()), float(img.max()))
+        img = Image.fromarray(norm_img)
 
-        # img -= img.mean()
-        # img /= img.std()
-
-        # mask = TF.normalize(mask, self.mean, self.std, self.inplace)
+        # print(norm_img.shape)
+        # img = torch.from_numpy(img_np).unsqueeze(0)
+        # img /= 255
         return img, mask
