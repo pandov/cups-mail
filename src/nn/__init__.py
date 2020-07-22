@@ -79,7 +79,7 @@ def get_multimodel(name, encoder):
 
 def get_optimizer(name, model):
     if name == 'adam':
-        return torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-5)
+        return torch.optim.Adam(model.parameters(), lr=1e-3, weight_decay=1e-6)
     elif name == 'sgd':
         return torch.optim.SGD(model.parameters(), lr=1e-3)
     elif name == 'rmsprop':
