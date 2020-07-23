@@ -6,45 +6,38 @@ import pandas as pd
 from src.nn import get_segmentation_components, get_classification_components, get_multimodel_components, get_class_names
 from src.dataset import Test
 from PIL import Image
-from torchvision import transforms
+from src.nn import transforms
+# from torchvision import transforms
 from tqdm import tqdm
 from catalyst.utils import get_device
 
 sample_submission = './dataset/external/sample_submission.csv'
-date = '22-07-20'
+date = '23-07-20'
 num_experiment = 0
 predicted_masks = f'.tmp/{date}/tests/'
 output_submission = f'.tmp/{date}/submission.csv'
 # segmentation_best = f'.tmp/{date}/segmentation/{num_experiment}/checkpoints/best.pth'
 # classification_best = f'.tmp/{date}/classification/{num_experiment}/checkpoints/best.pth'
 segmentation_best = f'.tmp/{date}/segmentation/unet_timm-efficientnet-b4/checkpoints/best.pth'
-classification_best = f'.tmp/{date}/classification/timm-efficientnet-b4/checkpoints/best.pth'
+classification_best = f'.tmp/{date}/classification/adv-efficientnet-b4/checkpoints/best.pth'
 # multimodel_best = f'.tmp/{date}/multimodel/{num_experiment}/checkpoints/best.pth'
 
 def addata(columns, *args):
     return dict(zip(columns, args))
 
-def negative_normalize(img):
-    img = 1 - img
-    img -= img.min()
-    img /= img.max()
-    return img
-
-def get_test_transform():
+def get_test_transform_aux():
     return transforms.Compose([
-        transforms.Grayscale(1),
+        transforms.Grayscale(),
+        transforms.Normalize(),
         transforms.ToTensor(),
-        transforms.Lambda(negative_normalize),
-        # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
 def get_test_transform_clf():
     return transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.Grayscale(1),
+        transforms.Grayscale(),
+        transforms.Normalize(),
+        transforms.Resize((384, 480)),
         transforms.ToTensor(),
-        transforms.Lambda(negative_normalize),
-        # transforms.Normalize((0.485, 0.456, 0.406), (0.229, 0.224, 0.225)),
     ])
 
 if __name__ == '__main__':
@@ -53,7 +46,7 @@ if __name__ == '__main__':
     df = pd.DataFrame(columns=columns)
 
     dataset = Test()
-    transform = get_test_transform()
+    transform_aux = get_test_transform_aux()
     transform_clf = get_test_transform_clf()
     device = get_device()
 
@@ -67,7 +60,7 @@ if __name__ == '__main__':
     segmentation.load_state_dict(segmentation_weights['model_state_dict'])
     segmentation.eval()
 
-    classification = get_classification_components('efficientnet-b4')['model'].to(device)
+    classification = get_classification_components('adv-efficientnet-b4')['model'].to(device)
     classification_weights = torch.load(classification_best)
     classification.load_state_dict(classification_weights['model_state_dict'])
     classification.eval()
@@ -79,21 +72,47 @@ if __name__ == '__main__':
     for filepath, image in tqdm(list(dataset)):
         savepath = predicted_masks + filepath.name
 
-        image_clf = transform_clf(image).unsqueeze(0).to(device)
-        image = transform(image).unsqueeze(0).to(device)
-
         with torch.no_grad():
-            # predict = multimodel(image)
-            predict_classification, predict_segmentation = map(unpack, (classification(image_clf), segmentation(image)))
+
+            image_aux = transform_aux(image).unsqueeze(0).to(device)
+            predict_segmentation = unpack(segmentation(image_aux))
             predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
+            predict_mask = (predict_segmentation > 0.5).astype(np.uint8) * 255
+
+            image_clf = transform_clf(image)
+            predict_classification = unpack(classification(image_clf))
+
+            # image_aux = transform_aux(image).unsqueeze(0).to(device)
+            # predict_segmentation = unpack(segmentation(image_aux))
+
+            # predict_segmentation -= predict_segmentation.min()
+            # predict_segmentation /= predict_segmentation.max()
+            # mask_clf = Image.fromarray(predict_mask[:, :, 0])
+            # mask_clf = transform_clf(mask_clf)
+
+            # cv2.imshow('predict_mask', predict_mask)
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
+
+            # image_clf = transform_clf(image)
+            # image_clf[:, mask_clf[0] == 0] *= 0.5
+
+            # cv2.imshow('image_clf', image_clf.permute(1, 2, 0).numpy())
+            # cv2.waitKey(0)
+            # cv2.destroyAllWindows()
+    
+            # image_clf = image_clf.unsqueeze(0).to(device)
+
+            # predict_classification = unpack(classification(image_clf))
+
+            # predict = multimodel(image)
+            # predict_classification, predict_segmentation = map(unpack, (classification(image_clf), segmentation(image)))
+            # predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
         # predict_segmentation, predict_classification = map(unpack, predict)
-        # predict_segmentation = predict_segmentation.permute(1, 2, 0).numpy()
 
-        predict_segmentation -= predict_segmentation.min()
-        predict_segmentation /= predict_segmentation.max()
-        predict_mask = (predict_segmentation > 0.5).astype(np.uint8)
-        predict_mask *= 255
+        # predict_mask = (predict_segmentation > 0.5).astype(np.uint8)
+        # predict_mask *= 255
 
         cv2.imwrite(savepath, predict_mask)
         with open(savepath, 'rb') as f:

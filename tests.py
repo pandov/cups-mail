@@ -31,10 +31,10 @@ def test_dataset():
         image = tensor.numpy().astype(dtype)
         return image
 
-    dataset = BACTERIA('train', keys=['name', 'image', 'mask', 'label'], apply_mask=True, is_resized=True)
+    dataset = BACTERIA('train', keys=['name', 'image', 'mask', 'label'], apply_mask=False, is_resized=False)
     size = lambda x: 'x'.join(map(str, x.shape))
-    for i, (name, image, mask, label) in enumerate(dataset):
-        # if i == 10: break
+    for i in range(0, len(dataset), 5):
+        name, image, mask, label = dataset[i]
         image = _torch2cv(image)
         mask = _torch2cv(mask)
         cv2.imshow(f'sample-{name}-{label}-{size(image)}', image)
@@ -47,7 +47,7 @@ def test_output_submission():
     from src.dataset.external import OutputSubmission
     out = OutputSubmission('.tmp/22-07-20/tests')
     for name, source, output in out:
-        source[output == 0] /= 2
+        source[output == 0] *= 0.5
         cv2.imshow(f'{name}-source', source)
         cv2.imshow(f'{name}-output', output)
         cv2.waitKey(0)
@@ -55,4 +55,4 @@ def test_output_submission():
 
 test_dataset()
 
-   # %%
+# %%

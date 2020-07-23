@@ -119,15 +119,19 @@ def get_dict_components(o, s, model, criterion, callbacks):
 
 def get_segmentation_components(m, e, o=None, s=None):
     from .metrics import DiceLoss, IoULoss
+    criterion = {
+        'iou': IoULoss(),
+        'dice': DiceLoss(),
+    }
     return get_dict_components(o, s,
-        get_segmentation_model(m, e), DiceLoss(), callbacks=None)
+        get_segmentation_model(m, e), criterion, callbacks=None)
 
 def get_classification_components(m, o=None, s=None, weightable=False):
     from catalyst.dl import ConfusionMatrixCallback
     from torch.nn import CrossEntropyLoss
     weight = None
     if weightable:
-        weight = torch.tensor([52., 69., 10., 3+29, 14., 5+18.], device=device)
+        weight = torch.tensor([52., 69., 10., 3+29, 1+14., 7+18.], device=device)
         weight /= weight.max()
         weight = 2 - weight
     return get_dict_components(o, s,
